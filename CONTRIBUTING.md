@@ -1,29 +1,74 @@
 # Contributing
 
-This repo uses a simple branch → PR → review → squash-merge workflow.
+All changes land on `main` through a pull request. Nobody pushes to `main` directly.
 
 ## Workflow
 
-1. **Branch** off `main` for your change:
-   ```bash
-   git checkout main
-   git pull
-   git checkout -b your-name/short-description
-   ```
+### 1. Branch
 
-2. **Open a pull request** against `main` once your branch is pushed. Auto-merge is enabled — you can turn it on for your PR and it will merge automatically once checks pass and the review requirement below is met.
+Start from an up-to-date `main`:
 
-3. **Get 1 approval.** `main` is protected: every PR needs at least one approving review before it can merge, and pushing new commits dismisses stale approvals, so re-request review after addressing feedback.
+```bash
+git checkout main
+git pull
+git checkout -b your-name/short-description
+```
 
-4. **Squash-merge.** `main` only accepts squash merges (no merge commits, no rebase merges) to keep history linear. The default squash commit message is the PR title and description, so write both to reflect what changed and why.
+Use a short, descriptive branch name — `viv/fix-audio-latency`, not `patch-1`.
 
-5. **Keep your branch current.** If `main` has moved on, update your branch before merging (GitHub will prompt you — "Update branch" is enabled by default).
+### 2. Commit
 
-Head branches are deleted automatically after merge, so no manual cleanup is needed.
+Keep commits focused. They get squashed on merge, so local commit granularity is
+for your own benefit while reviewing — don't agonize over it.
 
-## Branch protection summary
+### 3. Open a pull request
 
-- Force pushes and branch deletion are blocked on `main`.
-- Linear history is required (squash-merge only).
-- 1 approving review is required; new commits dismiss stale approvals.
-- No bypass actors — these rules apply to everyone, including admins.
+```bash
+git push -u origin your-name/short-description
+gh pr create --fill
+```
+
+The PR **title and body become the squash commit message**, so write them for
+someone reading `git log` six months from now:
+
+- Title: imperative and specific — `Fix audio latency on Safari`
+- Body: what changed, why, and anything a reviewer should check by hand
+
+If `main` has moved on, use the **Update branch** button (or rebase locally).
+History on `main` is linear, so a merge commit in your branch will block the merge —
+rebase instead of merging `main` into your branch.
+
+### 4. Review
+
+Every PR needs **one approval** from another team member before it can merge.
+
+- Reviewers: aim to respond within a working day.
+- Pushing new commits dismisses existing approvals, so get review comments
+  resolved before asking for the final look.
+- Authors don't approve their own PRs.
+
+### 5. Squash-merge
+
+Squash merge is the only merge method enabled — one commit per PR on `main`.
+
+```bash
+gh pr merge --squash --auto
+```
+
+`--auto` merges as soon as the approval lands. The head branch is deleted
+automatically after merge.
+
+## Repository settings
+
+These are enforced in GitHub, not by convention:
+
+| Setting | Value |
+| --- | --- |
+| Merge methods | Squash only (no merge commits, no rebase) |
+| Squash commit message | PR title and body |
+| Auto-merge | Enabled |
+| Suggest updating branches | Always |
+| Delete head branch on merge | Automatic |
+| `main` protection | PR required, 1 approval, stale approvals dismissed, linear history, no force pushes, no deletion |
+
+These rules apply to everyone, including admins — there are no bypass actors.
