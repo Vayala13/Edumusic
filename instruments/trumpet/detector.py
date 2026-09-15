@@ -23,51 +23,53 @@ import queue
 
 import numpy as np
 import sounddevice as sd
-import aubio
 
 from common.metronome import Metronome, DEFAULT_BPM
-from common.pitch_utils import freq_to_note
+from common.pitch_utils import PitchTracker, freq_to_note
 
 
 # ---------------------------------------------------------------------------
 # Configuration
 # ---------------------------------------------------------------------------
 SAMPLE_RATE = 44100
-BUFFER_SIZE = 1024          # samples per audio callback
-HOP_SIZE = 512               # aubio hop size (must divide buffer nicely)
-TOLERANCE = 0.8              # pitch detection confidence threshold
-MIN_CONFIDENCE = 0.85        # below this, treat the frame as silence/noise
+HOP_SIZE = 512               # samples per audio callback
+FRAME_LENGTH = 2048          # analysis window; see PitchTracker for why
+
+# Trumpet sounds from roughly E3 to C6. Bounding the search here rather than
+# using the wider default makes octave errors less likely.
+FMIN = 150.0
+FMAX = 1100.0
 
 
 # ---------------------------------------------------------------------------
 # Pitch detection (trumpet note listener)
 # ---------------------------------------------------------------------------
 class NoteDetector:
-    def __init__(self, samplerate=SAMPLE_RATE, buffer_size=BUFFER_SIZE, hop_size=HOP_SIZE):
-        # aubio's "pitch" object implements the YIN algorithm by default.
-        # To swap in a deep learning model like CREPE instead, replace this
-        # block with a call to crepe.predict() on each incoming audio chunk.
-        self.pitch_o = aubio.pitch("yin", buffer_size, hop_size, samplerate)
-        self.pitch_o.set_unit("Hz")
-        self.pitch_o.set_tolerance(TOLERANCE)
-        self.hop_size = hop_size
+    def __init__(self, samplerate=SAMPLE_RATE, frame_length=FRAME_LENGTH):
+        self.tracker = PitchTracker(samplerate=samplerate,
+                                    frame_length=frame_length,
+                                    fmin=FMIN,
+                                    fmax=FMAX)
         self.last_note = None
 
     def process(self, audio_chunk):
-        audio_chunk = audio_chunk.astype(np.float32)
-        pitch = self.pitch_o(audio_chunk)[0]
-        confidence = self.pitch_o.get_confidence()
-
-        if confidence > MIN_CONFIDENCE and pitch > 0:
-            result = freq_to_note(pitch)
-            if result:
-                note_name, cents_off = result
-                if note_name != self.last_note:
-                    sign = "+" if cents_off >= 0 else ""
-                    print(f"Note: {note_name:<4}  ({pitch:6.1f} Hz, {sign}{cents_off:.0f} cents)")
-                    self.last_note = note_name
-        else:
+        result = self.tracker.push(audio_chunk)
+        if result is None:
+            # Silence, noise, or a still-filling window: forget the held note so
+            # replaying the same pitch prints again.
             self.last_note = None
+            return
+
+        pitch, _confidence = result
+        note = freq_to_note(pitch)
+        if note is None:
+            return
+
+        note_name, cents_off = note
+        if note_name != self.last_note:
+            # int() before formatting, so a hair-flat note reads "+0" not "-0".
+            print(f"Note: {note_name:<4}  ({pitch:6.1f} Hz, {int(round(cents_off)):+d} cents)")
+            self.last_note = note_name
 
 
 # ---------------------------------------------------------------------------

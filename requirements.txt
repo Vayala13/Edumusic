@@ -1,28 +1,12 @@
-# EduMusic dependencies
+# EduMusic dependencies. Install with:
 #
-# IMPORTANT -- aubio does not have prebuilt wheels for macOS arm64, so it
-# compiles from source, and version 0.4.9 (the latest release, from 2019)
-# does not build cleanly against modern clang or ffmpeg 8. A plain
-# `pip install -r requirements.txt` WILL FAIL on aubio.
+#     ./setup.sh
 #
-# Install with:
+# or, inside an activated virtualenv:
 #
-#     pip install setuptools wheel
-#     CFLAGS="-Wno-error=incompatible-function-pointer-types" \
-#     PKG_CONFIG_LIBDIR="" PKG_CONFIG_PATH="" \
-#       pip install -r requirements.txt --no-build-isolation
+#     pip install -r requirements.txt
 #
-# Why each flag is needed:
-#   CFLAGS=-Wno-error=...  clang 16+ treats aubio's ufunc function-pointer
-#                          mismatch as an error rather than a warning.
-#   PKG_CONFIG_LIBDIR=""   hides ffmpeg from aubio's build. aubio 0.4.9 uses
-#                          the pre-ffmpeg-5 libav API (AVStream.codec), which
-#                          no longer exists. We only read from the microphone
-#                          via sounddevice, so aubio's file decoding is unused.
-#   --no-build-isolation   lets the build see the setuptools/numpy installed
-#                          above instead of a fresh isolated environment.
-#
-# Verified working: Python 3.14.2, numpy 2.5.3, macOS arm64 (Darwin 25.5).
+# Everything here ships prebuilt wheels -- no compiler needed.
 
 # Audio I/O (microphone input + metronome playback)
 sounddevice>=0.4.6
@@ -30,5 +14,9 @@ sounddevice>=0.4.6
 # Array math for pitch conversion and click synthesis
 numpy>=1.24
 
-# Monophonic pitch detection (YIN). See the build notes above.
-aubio==0.4.9
+# Monophonic pitch detection (YIN). Replaced aubio, which has no macOS arm64
+# wheels and whose last release (0.4.9, 2019) no longer compiles against
+# current clang or ffmpeg. librosa is maintained and installs from wheels.
+# It is a heavier dependency tree (numba, scipy, scikit-learn), but detection
+# costs ~0.25 ms per frame against an 11.6 ms budget, so speed is not at issue.
+librosa>=0.10
