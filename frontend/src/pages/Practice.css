@@ -1,0 +1,185 @@
+.practice-page {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 35px 20px 120px;
+}
+
+.practice-intro {
+    margin-bottom: 25px;
+}
+
+.practice-intro h1 {
+    margin: 8px 0 6px;
+    font-size: 36px;
+}
+
+.practice-intro>p:last-child {
+    margin: 0;
+    color: #a8afc0;
+    font-size: 15px;
+}
+
+.practice-card {
+    padding: 22px;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.practice-instrument {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.practice-instrument-icon {
+    width: 55px;
+    height: 55px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 14px;
+    background: rgba(246, 180, 75, 0.1);
+    font-size: 30px;
+}
+
+.practice-instrument h2 {
+    margin: 0 0 4px;
+    font-size: 20px;
+}
+
+.practice-instrument p {
+    margin: 0;
+    color: #8d94a8;
+    font-size: 13px;
+}
+
+.target-note {
+    margin-top: 25px;
+    padding-top: 25px;
+    text-align: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.target-note-label {
+    margin: 0 0 8px;
+    color: #f6b44b;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+}
+
+.target-note-value {
+    font-size: 72px;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 10px;
+}
+
+.target-note-description {
+    margin: 0;
+    color: #8d94a8;
+    font-size: 13px;
+}
+
+.practice-listening {
+    margin-top: 30px;
+    padding-top: 30px;
+    text-align: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.microphone-icon {
+    width: 70px;
+    height: 70px;
+    margin: 0 auto 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(246, 180, 75, 0.1);
+    font-size: 34px;
+}
+
+.practice-listening h3 {
+    margin: 0 0 7px;
+    font-size: 19px;
+}
+
+.practice-listening p {
+    max-width: 420px;
+    margin: 0 auto 18px;
+    color: #8d94a8;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.start-practice-button {
+    padding: 11px 20px;
+    border: none;
+    border-radius: 10px;
+    background: #f6b44b;
+    color: #1b1d25;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.start-practice-button:hover {
+    opacity: 0.9;
+}
+
+.practice-result {
+    margin-top: 25px;
+    padding: 20px;
+    text-align: center;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.practice-result-label {
+    margin: 0 0 8px;
+    color: #8d94a8;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+}
+
+.detected-note {
+    margin-bottom: 8px;
+    font-size: 42px;
+    font-weight: 700;
+}
+
+.practice-feedback {
+    margin: 0;
+    color: #a8afc0;
+    font-size: 13px;
+}
+
+.practice-actions {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.practice-progress {
+    margin: 0 0 12px;
+    color: #8d94a8;
+    font-size: 12px;
+}
+
+.next-note-button {
+    padding: 10px 20px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.06);
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.next-note-button:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
