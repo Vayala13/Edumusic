@@ -1,0 +1,206 @@
+.closet-page {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 35px 20px 120px;
+}
+
+.closet-intro {
+  margin-bottom: 25px;
+}
+
+.closet-intro h1 {
+  margin: 8px 0 6px;
+  font-size: 36px;
+}
+
+.closet-intro > p:last-child {
+  margin: 0;
+  color: #a8afc0;
+  font-size: 15px;
+}
+
+.current-instrument {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+
+  padding: 22px;
+  margin-bottom: 35px;
+
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.instrument-image {
+  width: 90px;
+  height: 90px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  border-radius: 16px;
+  background: rgba(246, 180, 75, 0.1);
+
+  font-size: 52px;
+}
+
+.instrument-info {
+  flex: 1;
+}
+
+.instrument-info h2 {
+  margin: 0 0 5px;
+  font-size: 22px;
+}
+
+.instrument-info > p {
+  margin: 0 0 12px;
+  color: #a8afc0;
+  font-size: 14px;
+}
+
+.instrument-progress {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.closet-progress {
+  width: 180px;
+  height: 7px;
+
+  overflow: hidden;
+
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.closet-progress .progress-fill {
+  width: 0%;
+  height: 100%;
+
+  border-radius: inherit;
+  background: #f6b44b;
+}
+
+.instrument-progress span {
+  color: #8d94a8;
+  font-size: 12px;
+}
+
+.instrument-button {
+  width: 45px;
+  height: 45px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  border-radius: 50%;
+  background: #f6b44b;
+
+  color: #17120a;
+  text-decoration: none;
+
+  font-size: 24px;
+  font-weight: 700;
+
+  transition: 0.2s ease;
+}
+
+.instrument-button:hover {
+  transform: translateX(3px);
+  filter: brightness(1.08);
+}
+
+.section-heading {
+  margin: 0 0 15px;
+  font-size: 20px;
+}
+
+.instrument-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+}
+
+.instrument-card {
+  min-height: 120px;
+
+  display: flex;
+  align-items: center;
+  gap: 15px;
+
+  position: relative;
+
+  padding: 20px;
+
+  border-radius: 16px;
+
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+
+  color: white;
+}
+
+.instrument-card.selected {
+  border-color: rgba(246, 180, 75, 0.45);
+  background: rgba(246, 180, 75, 0.08);
+}
+
+.instrument-card-icon {
+  font-size: 40px;
+}
+
+.instrument-card h3 {
+  margin: 0 0 5px;
+  font-size: 17px;
+}
+
+.instrument-card p {
+  margin: 0;
+  color: #8d94a8;
+  font-size: 13px;
+}
+
+.selected-label {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+
+  color: #f6b44b;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+}
+
+.add-instrument {
+  justify-content: center;
+  flex-direction: column;
+  gap: 8px;
+
+  cursor: pointer;
+  font-family: inherit;
+
+  color: #a8afc0;
+
+  transition: 0.2s ease;
+}
+
+.add-instrument:hover {
+  color: white;
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(246, 180, 75, 0.3);
+}
+
+.add-icon {
+  font-size: 32px;
+  color: #f6b44b;
+}

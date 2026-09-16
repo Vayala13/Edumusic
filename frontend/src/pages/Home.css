@@ -1,0 +1,138 @@
+/* Home Page */
+
+.home {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 35px 20px 120px;
+}
+
+/* Welcome */
+
+.welcome {
+  margin-bottom: 25px;
+}
+
+.welcome .eyebrow {
+  margin-bottom: 8px;
+}
+
+.welcome h1 {
+  margin: 0 0 6px;
+  font-size: 38px;
+}
+
+.welcome > p:last-child {
+  margin: 0;
+  color: #a8afc0;
+  font-size: 15px;
+}
+
+/* Shared small heading */
+
+.eyebrow {
+  margin: 0;
+  color: #f6b44b;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+}
+
+/* Continue Lesson */
+
+.continue-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+
+  padding: 22px 25px;
+  margin-bottom: 30px;
+
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+}
+
+.continue-card h2 {
+  margin: 7px 0 5px;
+  font-size: 22px;
+}
+
+.continue-card p:not(.eyebrow) {
+  margin: 0;
+  color: #a8afc0;
+  font-size: 14px;
+}
+
+.continue-button {
+  width: 45px;
+  height: 45px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  border-radius: 50%;
+  background: #f6b44b;
+  color: #17120a;
+
+  text-decoration: none;
+  font-size: 24px;
+  font-weight: 700;
+
+  transition: 0.2s ease;
+}
+
+.continue-button:hover {
+  transform: translateX(3px);
+  filter: brightness(1.08);
+}
+
+/* Quick Tools */
+
+.quick-actions h2 {
+  margin: 0 0 15px;
+  font-size: 20px;
+}
+
+.action-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /*tuner and metronome*/
+  gap: 15px;
+  max-width: 500px;
+}
+
+.action-button {
+  min-height: 110px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  border-radius: 16px;
+
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+
+  color: white;
+  text-decoration: none;
+
+  transition: 0.2s ease;
+}
+
+.action-button:hover {
+  transform: translateY(-3px);
+  background: rgba(255, 255, 255, 0.09);
+  border-color: rgba(246, 180, 75, 0.3);
+}
+
+.action-icon {
+  font-size: 32px;
+}
+
