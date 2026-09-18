@@ -44,20 +44,28 @@ FMAX = 1100.0
 # ---------------------------------------------------------------------------
 # Pitch detection (trumpet note listener)
 # ---------------------------------------------------------------------------
+
+
 class NoteDetector:
-    def __init__(self, samplerate=SAMPLE_RATE, frame_length=FRAME_LENGTH):
+    def __init__(self, samplerate=SAMPLE_RATE, frame_length=FRAME_LENGTH, stable_frames=8):
         self.tracker = PitchTracker(samplerate=samplerate,
                                     frame_length=frame_length,
                                     fmin=FMIN,
                                     fmax=FMAX)
         self.last_note = None
+        # Debounce: require the same note to be seen this many times in a
+        # row before printing, so a brief attack-transient misread (e.g.
+        # F#3 flickering before G3 settles in) doesn't get reported.
+        self.stable_frames = stable_frames
+        self._pending_note = None
+        self._pending_count = 0
 
     def process(self, audio_chunk):
         result = self.tracker.push(audio_chunk)
         if result is None:
-            # Silence, noise, or a still-filling window: forget the held note so
-            # replaying the same pitch prints again.
             self.last_note = None
+            self._pending_note = None
+            self._pending_count = 0
             return
 
         pitch, _confidence = result
@@ -66,8 +74,14 @@ class NoteDetector:
             return
 
         note_name, cents_off = note
-        if note_name != self.last_note:
-            # int() before formatting, so a hair-flat note reads "+0" not "-0".
+
+        if note_name == self._pending_note:
+            self._pending_count += 1
+        else:
+            self._pending_note = note_name
+            self._pending_count = 1
+
+        if self._pending_count >= self.stable_frames and note_name != self.last_note:
             print(f"Note: {note_name:<4}  ({pitch:6.1f} Hz, {int(round(cents_off)):+d} cents)")
             self.last_note = note_name
 
