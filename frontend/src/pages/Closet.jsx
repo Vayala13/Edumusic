@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
-import { useInstrument } from "../context/InstrumentContext";
+import { useInstrument } from "../context/useInstrument";
 import "./Closet.css";
 
 function Closet() {
