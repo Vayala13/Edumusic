@@ -1,6 +1,6 @@
-import { createContext, useContext, useState } from "react";
+import { useState } from "react";
 
-const ProgressContext = createContext();
+import { ProgressContext } from "./useProgress";
 
 export function ProgressProvider({ children }) {
   const [progress, setProgress] = useState(() => {
@@ -53,8 +53,4 @@ export function ProgressProvider({ children }) {
       {children}
     </ProgressContext.Provider>
   );
-}
-
-export function useProgress() {
-  return useContext(ProgressContext);
 }

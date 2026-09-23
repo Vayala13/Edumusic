@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar";
-import { useInstrument } from "../../context/InstrumentContext";
-import { useProgress } from "../../context/ProgressContext";
+import { useInstrument } from "../../context/useInstrument";
+import { useProgress } from "../../context/useProgress";
 import "./Lesson4-BasicBowing.css";
 
 function BasicBowing() {

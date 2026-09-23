@@ -1,6 +1,6 @@
-import { createContext, useContext, useState } from "react";
+import { useState } from "react";
 
-const InstrumentContext = createContext();
+import { InstrumentContext } from "./useInstrument";
 
 export function InstrumentProvider({ children }) {
   const [instrument, setInstrument] = useState(() => {
@@ -17,8 +17,4 @@ export function InstrumentProvider({ children }) {
       {children}
     </InstrumentContext.Provider>
   );
-}
-
-export function useInstrument() {
-  return useContext(InstrumentContext);
 }
