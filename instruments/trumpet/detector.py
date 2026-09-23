@@ -46,12 +46,22 @@ FMAX = 1100.0
 # ---------------------------------------------------------------------------
 
 
+def print_note(note_name, pitch, cents_off):
+    """Default reporter: the CLI behavior this detector has always had."""
+    print(f"Note: {note_name:<4}  ({pitch:6.1f} Hz, {int(round(cents_off)):+d} cents)")
+
+
 class NoteDetector:
-    def __init__(self, samplerate=SAMPLE_RATE, frame_length=FRAME_LENGTH, stable_frames=8):
+    def __init__(self, samplerate=SAMPLE_RATE, frame_length=FRAME_LENGTH, stable_frames=8,
+                 on_note=print_note):
         self.tracker = PitchTracker(samplerate=samplerate,
                                     frame_length=frame_length,
                                     fmin=FMIN,
                                     fmax=FMAX)
+        # Called with (note_name, pitch_hz, cents_off) once a note settles.
+        # Defaults to printing so the CLI is unchanged; a server passes its
+        # own reporter to push notes somewhere other than stdout.
+        self.on_note = on_note
         self.last_note = None
         # Debounce: require the same note to be seen this many times in a
         # row before printing, so a brief attack-transient misread (e.g.
@@ -82,8 +92,8 @@ class NoteDetector:
             self._pending_count = 1
 
         if self._pending_count >= self.stable_frames and note_name != self.last_note:
-            print(f"Note: {note_name:<4}  ({pitch:6.1f} Hz, {int(round(cents_off)):+d} cents)")
             self.last_note = note_name
+            self.on_note(note_name, pitch, cents_off)
 
 
 # ---------------------------------------------------------------------------
