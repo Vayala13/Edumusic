@@ -74,3 +74,50 @@ class TestNoteDetectorIntegration:
             feed(detector, sine_wave(freq, seconds=0.6))
             assert detector.last_note is not None, \
                 f"{freq} Hz should be recognized as a note"
+
+
+class TestNoteReporting:
+    """The on_note seam: how a caller other than the CLI receives notes."""
+
+    def test_reports_settled_notes_to_the_callback(self):
+        # Arrange
+        reported = []
+        detector = NoteDetector(stable_frames=3,
+                                on_note=lambda name, hz, cents: reported.append((name, hz, cents)))
+        # Act
+        feed(detector, sine_wave(440.0, seconds=1.0))
+        # Assert: one report, carrying the note, its pitch, and how far off it is
+        assert len(reported) == 1
+        name, hz, cents = reported[0]
+        assert name == "A4"
+        assert hz == pytest.approx(440.0, abs=1.0)
+        assert abs(cents) < 10
+
+    def test_reports_once_per_note_change_not_once_per_frame(self):
+        # Arrange
+        reported = []
+        detector = NoteDetector(stable_frames=3,
+                                on_note=lambda name, *_: reported.append(name))
+        # Act: two held notes, each spanning many frames
+        feed(detector, sine_wave(440.0, seconds=0.6))
+        feed(detector, sine_wave(392.0, seconds=0.6))
+        # Assert: a report per change, not per frame
+        assert reported == ["A4", "G4"]
+
+    def test_silence_is_not_reported(self):
+        # Arrange
+        reported = []
+        detector = NoteDetector(stable_frames=3,
+                                on_note=lambda name, *_: reported.append(name))
+        # Act
+        feed(detector, np.zeros(SAMPLE_RATE, dtype=np.float32))
+        # Assert
+        assert reported == []
+
+    def test_default_reporter_still_prints(self, capsys):
+        # Arrange: no on_note given, so the CLI default applies
+        detector = NoteDetector(stable_frames=3)
+        # Act
+        feed(detector, sine_wave(440.0, seconds=1.0))
+        # Assert
+        assert "A4" in capsys.readouterr().out
