@@ -59,9 +59,14 @@ someone reading `git log` six months from now:
 - Title: imperative and specific — `Fix audio latency on Safari`
 - Body: what changed, why, and anything a reviewer should check by hand
 
-If `main` has moved on, use the **Update branch** button (or rebase locally).
-History on `main` is linear, so a merge commit in your branch will block the merge —
-rebase instead of merging `main` into your branch.
+If the PR says your branch is out of date with `main`, click **Update branch**.
+Everything is squash-merged, so your branch's shape does not matter — it collapses
+into one commit on `main` either way, and `main` stays linear. A merge commit in
+your own branch is harmless.
+
+**Do this before asking for review, not after.** Update branch pushes a commit, and
+pushing dismisses existing approvals — so clicking it on an approved PR costs you
+the approval and you have to ask again.
 
 ### 5. Review
 
