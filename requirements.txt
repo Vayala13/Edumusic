@@ -20,3 +20,10 @@ numpy>=1.24
 # It is a heavier dependency tree (numba, scipy, scikit-learn), but detection
 # costs ~0.25 ms per frame against an 11.6 ms budget, so speed is not at issue.
 librosa>=0.10
+
+# Note server (backend/server.py) -- serves detected notes to the frontend
+# over a WebSocket. uvicorn runs it; httpx backs FastAPI's TestClient, which
+# the server tests use to drive the socket without a microphone.
+fastapi>=0.110
+uvicorn[standard]>=0.27
+httpx>=0.27
