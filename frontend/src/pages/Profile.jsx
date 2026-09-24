@@ -1,7 +1,34 @@
 import Navbar from "../components/Navbar";
+import { useInstrument } from "../context/useInstrument";
+import { useProgress } from "../context/useProgress";
+import { lessons } from "../data/lessons";
 import "./Profile.css";
 
 function Profile() {
+  const {instrument} = useInstrument();
+  const {progress} = useProgress();
+
+  const currentLessons = lessons[instrument];
+
+  const instrumentName =
+    instrument === "violin"
+      ? "Violin"
+      : "Trumpet";
+
+  const instrumentIcon =
+    instrument === "violin"
+      ? "🎻"
+      : "🎺";
+
+  const completedLessons =
+    progress[instrument]?.length || 0;
+
+  const totalLessons = currentLessons.length;
+
+  const progressPercentage = Math.round(
+    (completedLessons / totalLessons) * 100
+  );
+
   return (
     <div className="app">
       <header className="top-bar">
@@ -63,22 +90,29 @@ function Profile() {
 
           <div className="instrument-progress-card">
             <div className="instrument-icon">
-              🎺
+              {instrumentIcon}
             </div>
 
             <div className="instrument-progress-info">
               <div className="instrument-progress-header">
                 <div>
-                  <h3>Trumpet</h3>
+                  <h3>{instrumentName}</h3>
                   <p>Level 1 • Beginner</p>
                 </div>
 
-                <span>0%</span>
+                <span>{progressPercentage}%</span>
               </div>
 
               <div className="profile-progress-bar">
-                <div className="profile-progress-fill"></div>
+                <div className="profile-progress-fill"
+                  style={{
+                    width: `${progressPercentage}%`,
+                  }}
+                ></div>
               </div>
+              <p className="profile-lesson-count">
+                {completedLessons} of {totalLessons} lessons completed
+              </p>
             </div>
           </div>
         </section>

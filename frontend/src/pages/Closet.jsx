@@ -1,10 +1,52 @@
 import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import { useInstrument } from "../context/useInstrument";
+import { useProgress } from "../context/useProgress";
+import { lessons } from "../data/lessons";
 import "./Closet.css";
 
 function Closet() {
   const { instrument, changeInstrument } = useInstrument();
+  const { progress } = useProgress();
+
+  const getInstrumentProgress = (instrumentName) => {
+    const totalLessons = lessons[instrumentName]?.length || 0;
+    const completedLessons =
+      progress[instrumentName]?.length || 0;
+
+    if (totalLessons === 0) {
+      return 0;
+    }
+
+    return Math.round(
+      (completedLessons / totalLessons) * 100
+    );
+  };
+
+  const violinProgress = getInstrumentProgress("violin");
+  const trumpetProgress = getInstrumentProgress("trumpet");
+
+  const currentProgress =
+    instrument === "violin"
+      ? violinProgress
+      : trumpetProgress;
+
+  const currentCompletedLessons =
+    progress[instrument]?.length || 0;
+
+  const currentTotalLessons =
+    lessons[instrument]?.length || 0;
+
+  const instrumentName =
+    instrument === "violin"
+      ? "Violin"
+      : "Trumpet";
+
+  const instrumentIcon =
+    instrument === "violin"
+      ? "🎻"
+      : "🎺";
+
 
   return (
     <div className="app">
@@ -27,25 +69,32 @@ function Closet() {
         {/* Currently selected instrument */}
         <section className="current-instrument">
           <div className="instrument-image">
-            {instrument === "violin" ? "🎻" : "🎺"}
+            {instrumentIcon}
           </div>
 
           <div className="instrument-info">
             <h2>
-              {instrument === "violin" ? "Violin" : "Trumpet"}
+              {instrumentName}
             </h2>
 
             <p>Level 1 • Beginner</p>
 
             <div className="instrument-progress">
               <div className="closet-progress">
-                <div className="progress-fill"></div>
+                <div className="progress-fill"
+                style={{
+                  width: `${currentProgress}%`,
+                }}
+                ></div>
               </div>
 
               <span>
-                {instrument === "violin" ? "40%" : "0%"}
+                {currentProgress}%
               </span>
             </div>
+            <p className="closet-lesson-count">
+              {currentCompletedLessons} of {currentTotalLessons} lessons completed
+            </p>
           </div>
 
           <Link to="/" className="instrument-button">
@@ -70,7 +119,7 @@ function Closet() {
 
               <div>
                 <h3>Violin</h3>
-                <p>Level 1 • 40%</p>
+                <p>Level 1 • {violinProgress}%</p>
               </div>
 
               {instrument === "violin" && (
@@ -89,7 +138,7 @@ function Closet() {
 
               <div>
                 <h3>Trumpet</h3>
-                <p>Level 1 • 0%</p>
+                <p>Level 1 • {trumpetProgress}%</p>
               </div>
 
               {instrument === "trumpet" && (

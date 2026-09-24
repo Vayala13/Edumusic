@@ -1,10 +1,27 @@
 import { useState } from "react";
 import Navbar from "../components/Navbar";
+import { useInstrument } from "../context/useInstrument";
 import "./Practice.css";
 
 function Practice() {
+  const { instrument } = useInstrument();
+
   const [isListening, setIsListening] = useState(false);
-  const notes = ["C", "D", "E", "F", "G"];
+
+  const notes = 
+    instrument === "violin"
+    ? ["G","D","A","E"]
+    : ["C", "D", "E", "F", "G"];
+
+  const instrumentName =
+    instrument === "violin"
+    ? "Violin"
+    : "Trumpet"
+
+  const instrumentIcon = instrument === "violin"
+    ? "🎻"
+    : "🎺"
+
   const [currentNote, setCurrentNote] = useState(0);
   const [detectedNote, setDetectedNote] = useState(null);
 
@@ -27,10 +44,10 @@ function Practice() {
 
         <section className="practice-card">
           <div className="practice-instrument">
-            <span className="practice-instrument-icon">🎺</span>
+            <span className="practice-instrument-icon">{instrumentIcon}</span>
 
             <div>
-              <h2>Trumpet</h2>
+              <h2>{instrumentName}</h2>
               <p>Beginner Practice</p>
             </div>
           </div>
@@ -74,7 +91,7 @@ function Practice() {
               <p className="practice-feedback">
                 {detectedNote === notes[currentNote]
                   ? "Great job! You played the correct note."
-                  : "Not quite. Try <again!"}
+                  : "Not quite. Try again!"}
               </p>
 
             </div>
