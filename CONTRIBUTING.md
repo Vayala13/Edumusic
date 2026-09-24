@@ -21,7 +21,32 @@ Use a short, descriptive branch name — `viv/fix-audio-latency`, not `patch-1`.
 Keep commits focused. They get squashed on merge, so local commit granularity is
 for your own benefit while reviewing — don't agonize over it.
 
-### 3. Open a pull request
+### 3. Run the checks locally
+
+Two checks run on every pull request, and **both must pass before it can merge**.
+Run them before you push — it is faster than waiting for CI to tell you.
+
+```bash
+# Python tests, from the repo root
+source venv/bin/activate     # first time on a clone: ./setup.sh
+pytest
+
+# Frontend lint + build
+cd frontend
+npm run lint
+npm run build
+```
+
+Run `pytest` from the repo root. It reads `pytest.ini`, which puts the root on
+`sys.path` so `common` and `instruments` import without an editable install.
+
+Tests live in `tests/`. If you change behavior in `common/` or `instruments/`,
+add or update a test for it — the suite is what stops a deliberate fix from
+being undone by accident in a later refactor.
+
+The workflow itself is `.github/workflows/ci.yml`.
+
+### 4. Open a pull request
 
 ```bash
 git push -u origin your-name/short-description
@@ -34,11 +59,16 @@ someone reading `git log` six months from now:
 - Title: imperative and specific — `Fix audio latency on Safari`
 - Body: what changed, why, and anything a reviewer should check by hand
 
-If `main` has moved on, use the **Update branch** button (or rebase locally).
-History on `main` is linear, so a merge commit in your branch will block the merge —
-rebase instead of merging `main` into your branch.
+If the PR says your branch is out of date with `main`, click **Update branch**.
+Everything is squash-merged, so your branch's shape does not matter — it collapses
+into one commit on `main` either way, and `main` stays linear. A merge commit in
+your own branch is harmless.
 
-### 4. Review
+**Do this before asking for review, not after.** Update branch pushes a commit, and
+pushing dismisses existing approvals — so clicking it on an approved PR costs you
+the approval and you have to ask again.
+
+### 5. Review
 
 Every PR needs **one approval** from another team member before it can merge.
 
@@ -47,7 +77,7 @@ Every PR needs **one approval** from another team member before it can merge.
   resolved before asking for the final look.
 - Authors don't approve their own PRs.
 
-### 5. Squash-merge
+### 6. Squash-merge
 
 Squash merge is the only merge method enabled — one commit per PR on `main`.
 
@@ -70,5 +100,7 @@ These are enforced in GitHub, not by convention:
 | Suggest updating branches | Always |
 | Delete head branch on merge | Automatic |
 | `main` protection | PR required, 1 approval, stale approvals dismissed, linear history, no force pushes, no deletion |
+| Required status checks | `Python tests` and `Frontend lint + build` must pass |
+| Branch must be up to date | Yes — rebase on `main` if CI ran against older code |
 
 These rules apply to everyone, including admins — there are no bypass actors.
