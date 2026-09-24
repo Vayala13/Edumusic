@@ -4,6 +4,7 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import { AuthProvider } from "./context/AuthContext";
+import ProtectedRoute from "./components/ProtectedRoute";
 import Lessons from "./pages/Lessons";
 import Practice from "./pages/Practice";
 import Challenges from "./pages/Challenges";
@@ -17,24 +18,26 @@ import FirstNotes from "./lessons/violin/Lesson5-FirstNotes";
 
 function App() {
   return (
-   <AuthProvider>
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/lessons" element={<Lessons />} />
-        <Route path="/practice" element={<Practice />} />
-        <Route path="/challenges" element={<Challenges />} />
-        <Route path="/closet" element={<Closet />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/lesson/violin/getting-started" element={<GettingStarted />} />
-        <Route path="/lesson/violin/tuning" element={<Tuning />} />
-        <Route path="/lesson/violin/open-strings" element={<OpenStrings />} />
-        <Route path="/lesson/violin/basic-bowing" element={<BasicBowing />} />
-        <Route path="/lesson/violin/first-notes" element={<FirstNotes />} />
-      </Routes>
-    </BrowserRouter>
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route element={<ProtectedRoute />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/lessons" element={<Lessons />} />
+            <Route path="/practice" element={<Practice />} />
+            <Route path="/challenges" element={<Challenges />} />
+            <Route path="/closet" element={<Closet />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/lesson/violin/getting-started" element={<GettingStarted />} />
+            <Route path="/lesson/violin/tuning" element={<Tuning />} />
+            <Route path="/lesson/violin/open-strings" element={<OpenStrings />} />
+            <Route path="/lesson/violin/basic-bowing" element={<BasicBowing />} />
+            <Route path="/lesson/violin/first-notes" element={<FirstNotes />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
     </AuthProvider>
   );
 }

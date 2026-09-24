@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../context/useAuth";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -16,7 +16,7 @@ function Login() {
     try {
       await login(email, password);
       navigate("/"); // send them to the home page once logged in
-    } catch (err) {
+    } catch{
       setError("Incorrect email or password.");
     }
   }
