@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../context/useAuth";
+import "./Auth.css";
 
 function Signup() {
   const [email, setEmail] = useState("");
@@ -31,38 +32,93 @@ function Signup() {
   }
 
   return (
-    <div>
-      <h1>Sign Up</h1>
+    <div className="auth-page">
+      <div className="auth-background">
+        <div className="auth-glow auth-glow-one"></div>
+        <div className="auth-glow auth-glow-two"></div>
+      </div>
 
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      <main className="auth-container">
+        <section className="auth-card">
 
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Email</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
+          <div className="auth-brand">
+            <div className="auth-brand-icon">🎻</div>
+            <span>Edumusic</span>
+          </div>
 
-        <div>
-          <label>Password</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
+          <div className="auth-heading">
+            <p className="auth-eyebrow">GET STARTED</p>
+            <h1>Create an account</h1>
+            <p>
+              Start your musical journey with Edumusic.
+            </p>
+          </div>
 
-        <button type="submit">Sign Up</button>
-      </form>
+          {error && (
+            <div className="auth-error">
+              <span>!</span>
+              <p>{error}</p>
+            </div>
+          )}
 
-      <p>
-        Already have an account? <Link to="/login">Log in</Link>
-      </p>
+          <form
+            className="auth-form"
+            onSubmit={handleSubmit}
+          >
+            <div className="auth-field">
+              <label htmlFor="email">Email</label>
+
+              <input
+                id="email"
+                type="email"
+                placeholder="you@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </div>
+
+            <div className="auth-field">
+              <label htmlFor="password">Password</label>
+
+              <input
+                id="password"
+                type="password"
+                placeholder="Create a password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+
+              <span className="auth-hint">
+                Use at least 6 characters.
+              </span>
+            </div>
+
+            <button
+              type="submit"
+              className="auth-submit"
+            >
+              Create Account
+              <span>→</span>
+            </button>
+          </form>
+
+          <div className="auth-divider">
+            <span>Already a member?</span>
+          </div>
+
+          <p className="auth-switch">
+            Already have an account?{" "}
+            <Link to="/login">Log in</Link>
+          </p>
+
+        </section>
+
+        <p className="auth-footer">
+          Learn • Practice • Play
+        </p>
+      </main>
     </div>
   );
 }
