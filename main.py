@@ -22,6 +22,7 @@ from common.metronome import DEFAULT_BPM
 # name -> (module path, human description)
 INSTRUMENTS = {
     "trumpet": ("instruments.trumpet.detector", "Trumpet note detector + metronome"),
+    "violin": ("instruments.violin.detector", "Violin note detector + metronome"),
 }
 
 
