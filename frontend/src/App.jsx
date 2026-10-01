@@ -3,7 +3,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
-import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Lessons from "./pages/Lessons";
 import Practice from "./pages/Practice";
@@ -18,8 +17,7 @@ import FirstNotes from "./lessons/violin/Lesson5-FirstNotes";
 
 function App() {
   return (
-    <AuthProvider>
-      <BrowserRouter>
+    <BrowserRouter>
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
@@ -37,8 +35,7 @@ function App() {
             <Route path="/lesson/violin/first-notes" element={<FirstNotes />} />
           </Route>
         </Routes>
-      </BrowserRouter>
-    </AuthProvider>
+    </BrowserRouter>
   );
 }
 
