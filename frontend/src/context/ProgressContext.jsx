@@ -15,12 +15,19 @@ export function ProgressProvider({ children }) {
   //will load user's progress from firestore whenever someone logged in changes
 useEffect(() => {
   if (!user){
+    Promise.resolve().then(() => {
     setProgress(EMPTY_PROGRESS);
     setLoading(false);
+    });
     return;
 }
- setLoading(true);
-    const progressRef = doc(db, "progress", user.uid);
+
+ Promise.resolve().then(() => {
+    setLoading(true);
+  });
+
+
+ const progressRef = doc(db, "progress", user.uid);
 
     getDoc(progressRef).then((snapshot) => {
       if (snapshot.exists()) {
