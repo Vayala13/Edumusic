@@ -8,15 +8,15 @@ function Practice() {
 
   const [isListening, setIsListening] = useState(false);
 
-  const notes = 
+  const notes =
     instrument === "violin"
-    ? ["G","D","A","E"]
-    : ["C", "D", "E", "F", "G"];
+      ? ["G", "D", "A", "E"]
+      : ["C", "D", "E", "F", "G"];
 
   const instrumentName =
     instrument === "violin"
-    ? "Violin"
-    : "Trumpet"
+      ? "Violin"
+      : "Trumpet"
 
   const instrumentIcon = instrument === "violin"
     ? "🎻"
@@ -24,6 +24,7 @@ function Practice() {
 
   const [currentNote, setCurrentNote] = useState(0);
   const [detectedNote, setDetectedNote] = useState(null);
+  const [practiceStatus, setPracticeStatus] = useState("ready");
 
   return (
     <div className="app">
@@ -72,7 +73,8 @@ function Practice() {
               className="start-practice-button"
               onClick={() => {
                 setIsListening(true);
-                setDetectedNote(notes[currentNote]);
+                setDetectedNote(null);
+                setPracticeStatus("listening");
               }}
             >
               {isListening ? "Listening..." : "Start Listening"}
@@ -85,13 +87,15 @@ function Practice() {
               <p className="practice-result-label">DETECTED NOTE</p>
 
               <div className="detected-note">
-                {notes[currentNote]}
+                {detectedNote || "—"}
               </div>
 
               <p className="practice-feedback">
-                {detectedNote === notes[currentNote]
-                  ? "Great job! You played the correct note."
-                  : "Not quite. Try again!"}
+                {practiceStatus === "listening"
+                  ? "Listening for your note..."
+                  : practiceStatus === "correct"
+                    ? "Great job! You played the correct note."
+                    : "Not quite. Try again!"}
               </p>
 
             </div>
