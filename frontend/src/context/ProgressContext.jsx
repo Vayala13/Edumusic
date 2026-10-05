@@ -1,41 +1,59 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 
+import { db } from "../firebase";
+import { useAuth } from "./useAuth";
 import { ProgressContext } from "./useProgress";
 
+const EMPTY_PROGRESS = { violin: [], trumpet: [] };
+
 export function ProgressProvider({ children }) {
-  const [progress, setProgress] = useState(() => {
-    const savedProgress = localStorage.getItem("lessonProgress");
+  const { user } = useAuth();
+  const [progress, setProgress] = useState(EMPTY_PROGRESS);
+  const [loading, setLoading] = useState(true);
 
-    if (savedProgress) {
-      return JSON.parse(savedProgress);
-    }
+  //will load user's progress from firestore whenever someone logged in changes
+useEffect(() => {
+  if (!user){
+    Promise.resolve().then(() => {
+    setProgress(EMPTY_PROGRESS);
+    setLoading(false);
+    });
+    return;
+}
 
-    return {
-      violin: [],
-      trumpet: [],
-    };
+ Promise.resolve().then(() => {
+    setLoading(true);
   });
 
-  const completeLesson = (instrument, lessonNumber) => {
-    setProgress((currentProgress) => {
-      const completed = currentProgress[instrument] || [];
 
-      if (completed.includes(lessonNumber)) {
-        return currentProgress;
+ const progressRef = doc(db, "progress", user.uid);
+
+    getDoc(progressRef).then((snapshot) => {
+      if (snapshot.exists()) {
+        setProgress(snapshot.data());
+      } else {
+        setProgress(EMPTY_PROGRESS);
       }
-
-      const updatedProgress = {
-        ...currentProgress,
-        [instrument]: [...completed, lessonNumber],
-      };
-
-      localStorage.setItem(
-        "lessonProgress",
-        JSON.stringify(updatedProgress)
-      );
-
-      return updatedProgress;
+      setLoading(false);
     });
+  }, [user]);
+
+  const completeLesson = async (instrument, lessonNumber) => {
+    if (!user) return;
+
+    const completed = progress[instrument] || [];
+    if (completed.includes(lessonNumber)) return;
+
+    const updatedProgress = {
+      ...progress,
+      [instrument]: [...completed, lessonNumber],
+    };
+
+    setProgress(updatedProgress);
+
+    const progressRef = doc(db, "progress", user.uid);
+    await setDoc(progressRef, updatedProgress);
   };
 
   const isLessonCompleted = (instrument, lessonNumber) => {
@@ -48,6 +66,7 @@ export function ProgressProvider({ children }) {
         progress,
         completeLesson,
         isLessonCompleted,
+        loading,
       }}
     >
       {children}
