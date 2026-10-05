@@ -183,3 +183,105 @@
 .next-note-button:hover {
     background: rgba(255, 255, 255, 0.1);
 }
+
+/* ------------------------------------------------------------------ */
+/* Note picker + random mode (added)                                  */
+/* ------------------------------------------------------------------ */
+
+.practice-mode {
+    margin-top: 25px;
+    padding-top: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.mode-toggle {
+    display: flex;
+    gap: 6px;
+    padding: 4px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.mode-button {
+    padding: 8px 16px;
+    border: 1px solid transparent;
+    border-radius: 9px;
+    background: transparent;
+    color: #a8afc0;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.mode-button:hover {
+    color: #ffffff;
+}
+
+.mode-button.active {
+    border-color: rgba(246, 180, 75, 0.5);
+    background: rgba(246, 180, 75, 0.12);
+    color: #f6b44b;
+}
+
+.note-picker {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #8d94a8;
+    font-size: 13px;
+}
+
+.note-picker select {
+    padding: 8px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 10px;
+    background: #1b1d25;
+    color: #ffffff;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.note-picker select option {
+    background: #1b1d25;
+    color: #ffffff;
+}
+
+.mode-button:focus-visible,
+.note-picker select:focus-visible {
+    outline: 2px solid #f6b44b;
+    outline-offset: 2px;
+}
+
+.practice-buttons {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.practice-finished {
+    margin-top: 25px;
+    padding: 35px 20px 10px;
+    text-align: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.practice-finished h3 {
+    margin: 0 0 8px;
+    font-size: 24px;
+}
+
+.practice-finished p {
+    margin: 0 0 22px;
+    color: #8d94a8;
+    font-size: 14px;
+}
