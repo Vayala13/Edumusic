@@ -1,0 +1,193 @@
+.metronome-page {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 35px 20px 120px;
+}
+
+.metronome-intro {
+  margin-bottom: 25px;
+}
+
+.metronome-intro h1 {
+  margin: 8px 0 6px;
+  font-size: 36px;
+}
+
+.metronome-intro > p:last-child {
+  margin: 0;
+  color: #a8afc0;
+  font-size: 15px;
+}
+
+.metronome-card {
+  padding: 35px 25px;
+  text-align: center;
+  border-radius: 20px;
+  background:
+    radial-gradient(
+      circle at center,
+      rgba(246, 180, 75, 0.12),
+      transparent 60%
+    ),
+    rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.tempo-label {
+  margin: 0 0 8px;
+  color: #f6b44b;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.4px;
+}
+
+.bpm-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.bpm-display span {
+  font-size: 76px;
+  line-height: 1;
+  font-weight: 700;
+}
+
+.bpm-display small {
+  margin-top: 8px;
+  color: #8d94a8;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.beat-indicators {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  margin: 30px 0;
+}
+
+.beat-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #3a4052;
+  transition:
+    transform 0.08s ease,
+    background 0.08s ease,
+    box-shadow 0.08s ease;
+}
+
+.beat-dot.downbeat {
+  width: 16px;
+  height: 16px;
+}
+
+.beat-dot.active {
+  background: #f6b44b;
+  transform: scale(1.35);
+  box-shadow: 0 0 18px rgba(246, 180, 75, 0.55);
+}
+
+.tempo-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 25px;
+  margin-bottom: 25px;
+}
+
+.tempo-adjust {
+  width: 46px;
+  height: 46px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.06);
+  color: white;
+  font-size: 25px;
+  cursor: pointer;
+}
+
+.tempo-adjust:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.tempo-adjust:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.tempo-value {
+  min-width: 100px;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.tempo-value span {
+  margin-left: 5px;
+  color: #8d94a8;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.metronome-toggle {
+  min-width: 150px;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 11px;
+  background: #f6b44b;
+  color: #17120a;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.metronome-toggle:hover {
+  filter: brightness(1.08);
+}
+
+.metronome-toggle.playing {
+  background: #b9bfd0;
+}
+
+.tempo-presets {
+  margin-top: 25px;
+  padding: 22px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.tempo-presets h2 {
+  margin: 0 0 15px;
+  font-size: 18px;
+}
+
+.preset-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+}
+
+.preset {
+  padding: 10px 5px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.04);
+  color: #a8afc0;
+  font-family: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.preset:hover {
+  color: white;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.preset.active {
+  border-color: rgba(246, 180, 75, 0.5);
+  background: rgba(246, 180, 75, 0.12);
+  color: #f6b44b;
+}
