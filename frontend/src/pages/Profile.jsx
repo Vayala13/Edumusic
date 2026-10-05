@@ -1,12 +1,21 @@
 import Navbar from "../components/Navbar";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/useAuth";
 import { useInstrument } from "../context/useInstrument";
 import { useProgress } from "../context/useProgress";
 import { lessons } from "../data/lessons";
 import "./Profile.css";
 
 function Profile() {
+  const navigate = useNavigate();
+  const { logout } = useAuth();
   const {instrument} = useInstrument();
   const {progress} = useProgress();
+
+  async function handleLogout() {
+    await logout();
+    navigate("/login");
+  }
 
   const currentLessons = lessons[instrument];
 
@@ -151,7 +160,11 @@ function Profile() {
         </section>
 
       </main>
-
+        <section className="logout-section">
+          <button onClick={handleLogout} className="logout-button">
+            🚪 Log Out
+          </button>
+        </section>
       <Navbar />
     </div>
   );

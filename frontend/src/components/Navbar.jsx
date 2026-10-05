@@ -1,15 +1,7 @@
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useAuth } from "../context/useAuth";
+import { Link, useLocation} from "react-router-dom";
 
 function Navbar() {
   const location = useLocation();
-  const navigate = useNavigate();
-  const { logout } = useAuth();
-
-  async function handleLogout() {
-    await logout();
-    navigate("/login");
-  }
 
   return (
     <nav className="bottom-nav">
@@ -37,11 +29,6 @@ function Navbar() {
         👤
         <span>Profile</span>
       </Link>
-
-      <button onClick={handleLogout} className="nav-logout">
-        🚪
-        <span>Log Out</span>
-      </button>
     </nav>
   );
 }
