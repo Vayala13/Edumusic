@@ -17,6 +17,23 @@ const VIOLIN_NOTES = [
 
 const TRUMPET_NOTES = ["C", "D", "E", "F", "G"];
 
+// Same order and spelling as NOTE_NAMES in common/pitch_utils.py.
+const NOTE_NAMES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+
+// A B♭ trumpet sounds a whole step (2 semitones) lower than the note written
+// in the music: fingering a written C produces a concert B♭. The detector
+// hears concert pitch ("A#3"), so shift it up to the written note the player
+// is reading ("C4") before comparing it to the target.
+function toTrumpetNote(concertNote) {
+  const match = /^([A-G]#?)(-?\d+)$/.exec(concertNote);
+  if (!match) {
+    return concertNote;
+  }
+
+  const semitone = (Number(match[2]) + 1) * 12 + NOTE_NAMES.indexOf(match[1]) + 2;
+  return `${NOTE_NAMES[semitone % 12]}${Math.floor(semitone / 12) - 1}`;
+}
+
 // Returns a shuffled copy of the list. Each note appears exactly once, so a
 // random round never repeats a note.
 function shuffle(list) {
@@ -126,9 +143,12 @@ function Practice() {
         return;
       }
 
-      setDetectedNote(message.note);
+      const playedNote =
+        instrument === "trumpet" ? toTrumpetNote(message.note) : message.note;
 
-      if (isMatch(message.note, targetNote)) {
+      setDetectedNote(playedNote);
+
+      if (isMatch(playedNote, targetNote)) {
         setPracticeStatus("correct");
         closeSocket(); // right note: stop listening
       } else {
