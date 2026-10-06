@@ -1,0 +1,59 @@
+.songs-page {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 35px 20px 120px;
+}
+
+.songs-hint {
+  margin: 0 0 16px;
+  color: #000000;
+  font-size: 15px;
+}
+
+.songs-carousel {
+  height: 520px;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid #e5e7eb;
+}
+
+.song-details {
+  margin-top: 20px;
+  padding: 22px;
+  border-radius: 18px;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+}
+
+.song-details h2 {
+  margin: 8px 0 4px;
+  font-size: 24px;
+  color: #000000;
+}
+
+.song-note-count {
+  margin: 0 0 16px;
+  color: #000000;
+  font-size: 14px;
+}
+
+.song-notes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.song-note {
+  min-width: 38px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: #eef0f4;
+  text-align: center;
+  font-weight: 700;
+}
+
+@media (max-width: 600px) {
+  .songs-carousel {
+    height: 440px;
+  }
+}

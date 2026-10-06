@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="1200" viewBox="0 0 900 1200">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.4" y2="1">
+      <stop offset="0" stop-color="#86efac"/>
+      <stop offset="1" stop-color="#b91c1c"/>
+    </linearGradient>
+  </defs>
+  <rect width="900" height="1200" fill="url(#bg)"/>
+  <circle cx="450" cy="470" r="250" fill="#fefce8" fill-opacity="0.18"/>
+  <circle cx="450" cy="470" r="170" fill="#fefce8" fill-opacity="0.22"/>
+  <text x="450" y="560" text-anchor="middle" font-family="Georgia, serif" font-size="260" fill="#fefce8">✦</text>
+  <text x="450" y="900" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="84" fill="#fefce8">Jingle</text>
+  <text x="450" y="1000" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="84" fill="#fefce8">Bells</text>
+</svg>

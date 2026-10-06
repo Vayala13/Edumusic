@@ -6,6 +6,7 @@ import Signup from "./pages/Signup";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Lessons from "./pages/Lessons";
 import Practice from "./pages/Practice";
+import Songs from "./pages/Songs";
 import Challenges from "./pages/Challenges";
 import Closet from "./pages/Closet";
 import Profile from "./pages/Profile";
@@ -28,6 +29,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/lessons" element={<Lessons />} />
             <Route path="/practice" element={<Practice />} />
+            <Route path="/songs" element={<Songs />} />
             <Route path="/challenges" element={<Challenges />} />
             <Route path="/closet" element={<Closet />} />
             <Route path="/profile" element={<Profile />} />
