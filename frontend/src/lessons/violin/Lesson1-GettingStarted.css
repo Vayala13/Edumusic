@@ -7,13 +7,13 @@
 .back-link {
   display: inline-block;
   margin-bottom: 25px;
-  color: #aab3d6;
+  color: #000000;
   text-decoration: none;
   font-size: 14px;
 }
 
 .back-link:hover {
-  color: white;
+  color: #000000;
 }
 
 .lesson-header {
@@ -27,7 +27,7 @@
 
 .lesson-header > p:last-child {
   margin: 0;
-  color: #a8afc0;
+  color: #000000;
   font-size: 15px;
 }
 
@@ -38,7 +38,7 @@
   padding: 4px;
   width: fit-content;
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(0, 0, 0, 0.04);
 }
 
 .mode-button {
@@ -46,7 +46,7 @@
   border: none;
   border-radius: 9px;
   background: transparent;
-  color: #8d94a8;
+  color: #000000;
   font-family: inherit;
   font-size: 13px;
   font-weight: 600;
@@ -55,7 +55,7 @@
 }
 
 .mode-button:hover {
-  color: white;
+  color: #000000;
 }
 
 .mode-button.active {
@@ -84,11 +84,11 @@
     ),
     linear-gradient(
       145deg,
-      #282033,
-      #111827
+      #fff4e0,
+      #f3f4f6
     );
 
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.064);
 }
 
 .instrument-display span {
@@ -101,8 +101,8 @@
 .lesson-section {
   padding: 22px;
   border-radius: 16px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0.064);
 }
 
 .lesson-section h2 {
@@ -112,7 +112,7 @@
 
 .lesson-section p {
   margin: 0;
-  color: #a8afc0;
+  color: #000000;
   line-height: 1.6;
 }
 
@@ -132,8 +132,8 @@
   gap: 8px;
 
   border-radius: 13px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0.064);
 }
 
 .part-card strong {
@@ -141,7 +141,7 @@
 }
 
 .part-card span {
-  color: #a8afc0;
+  color: #000000;
   font-size: 12px;
 }
 
@@ -180,9 +180,9 @@
       rgba(49, 94, 170, 0.3),
       transparent 65%
     ),
-    rgba(255, 255, 255, 0.05);
+    rgba(0, 0, 0, 0.04);
 
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.064);
 }
 
 .practice-card h2,
@@ -195,7 +195,7 @@
 .play-card > p:not(.eyebrow) {
   max-width: 500px;
   margin: 0 auto;
-  color: #a8afc0;
+  color: #000000;
   line-height: 1.6;
 }
 
@@ -207,8 +207,8 @@
 .practice-tip {
   padding: 14px;
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.05);
-  color: #c7cce0;
+  background: rgba(0, 0, 0, 0.04);
+  color: #000000;
   font-size: 14px;
 }
 
@@ -217,8 +217,8 @@
   margin: 25px auto 0;
   padding: 14px;
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.05);
-  color: #a8afc0;
+  background: rgba(0, 0, 0, 0.04);
+  color: #000000;
   font-size: 14px;
 }
 
@@ -238,7 +238,7 @@
 
 .lesson-completion p {
   margin: 0;
-  color: #c7cce0;
+  color: #000000;
 }
 
 .complete-button {

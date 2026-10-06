@@ -15,7 +15,7 @@
 
 .closet-intro > p:last-child {
   margin: 0;
-  color: #a8afc0;
+  color: #000000;
   font-size: 15px;
 }
 
@@ -28,8 +28,8 @@
   margin-bottom: 35px;
 
   border-radius: 18px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(0, 0, 0, 0.048);
+  border: 1px solid rgba(0, 0, 0, 0.064);
 }
 
 .instrument-image {
@@ -59,7 +59,7 @@
 
 .instrument-info > p {
   margin: 0 0 12px;
-  color: #a8afc0;
+  color: #000000;
   font-size: 14px;
 }
 
@@ -76,7 +76,7 @@
   overflow: hidden;
 
   border-radius: 10px;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.08);
 }
 
 .closet-progress .progress-fill {
@@ -88,7 +88,7 @@
 }
 
 .instrument-progress span {
-  color: #8d94a8;
+  color: #000000;
   font-size: 12px;
 }
 
@@ -143,10 +143,10 @@
 
   border-radius: 16px;
 
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0.064);
 
-  color: white;
+  color: #000000;
 }
 
 .instrument-card.selected {
@@ -165,7 +165,7 @@
 
 .instrument-card p {
   margin: 0;
-  color: #8d94a8;
+  color: #000000;
   font-size: 13px;
 }
 
@@ -174,7 +174,7 @@
   top: 12px;
   right: 12px;
 
-  color: #f6b44b;
+  color: #b45309;
   font-size: 10px;
   font-weight: 700;
   text-transform: uppercase;
@@ -189,18 +189,18 @@
   cursor: pointer;
   font-family: inherit;
 
-  color: #a8afc0;
+  color: #000000;
 
   transition: 0.2s ease;
 }
 
 .add-instrument:hover {
-  color: white;
-  background: rgba(255, 255, 255, 0.08);
+  color: #000000;
+  background: rgba(0, 0, 0, 0.064);
   border-color: rgba(246, 180, 75, 0.3);
 }
 
 .add-icon {
   font-size: 32px;
-  color: #f6b44b;
+  color: #b45309;
 }
