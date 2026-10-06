@@ -207,14 +207,6 @@ function Practice() {
 
   return (
     <div className="app">
-      <header className="top-bar">
-        <div className="logo">Practice</div>
-
-        <div className="profile">
-          <span>👤</span>
-        </div>
-      </header>
-
       <main className="practice-page">
         <section className="practice-intro">
           <p className="eyebrow">PRACTICE MODE</p>
