@@ -52,6 +52,17 @@
   font-weight: 700;
 }
 
+.song-play-link {
+  display: inline-block;
+  margin-top: 18px;
+  padding: 11px 20px;
+  border-radius: 11px;
+  background: #f6b44b;
+  color: #17120a;
+  font-weight: 700;
+  text-decoration: none;
+}
+
 @media (max-width: 600px) {
   .songs-carousel {
     height: 440px;

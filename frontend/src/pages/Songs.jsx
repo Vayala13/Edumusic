@@ -1,7 +1,8 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import { LiquidGlassCarousel } from "../components/LiquidGlassCarousel";
-import { songs } from "../data/songs";
+import { playableNotes, songs } from "../data/songs";
 import "./Songs.css";
 
 // Built once: the carousel rebuilds its WebGL scene whenever `items` changes.
@@ -15,6 +16,7 @@ function Songs() {
   const [activeSong, setActiveSong] = useState(0);
 
   const song = songs[activeSong];
+  const notes = playableNotes(song);
 
   return (
     <div className="app">
@@ -36,15 +38,19 @@ function Songs() {
         <section className="song-details">
           <p className="eyebrow">NOW SELECTED</p>
           <h2>{song.title}</h2>
-          <p className="song-note-count">{song.notes.length} notes</p>
+          <p className="song-note-count">{notes.length} notes</p>
 
           <div className="song-notes">
-            {song.notes.map((note, index) => (
+            {notes.map((note, index) => (
               <span key={index} className="song-note">
                 {note}
               </span>
             ))}
           </div>
+
+          <Link to={`/songs/${song.id}`} className="song-play-link">
+            Play this song →
+          </Link>
         </section>
       </main>
 
