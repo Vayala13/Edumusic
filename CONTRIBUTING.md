@@ -2,6 +2,82 @@
 
 All changes land on `main` through a pull request. Nobody pushes to `main` directly.
 
+## Running the app locally
+
+The app is two processes: the Python note server (it listens to the microphone
+and streams detected notes) and the React frontend. Run each in its own
+terminal window, then open http://localhost:5173.
+
+You need **Python 3** and **Node.js** installed.
+
+### Mac
+
+First time on a clone:
+
+```bash
+./setup.sh
+cd frontend && npm install
+```
+
+Then, each time:
+
+```bash
+# Window 1: note server, from the repo root
+source venv/bin/activate
+uvicorn backend.server:app --reload --port 8000
+
+# Window 2: frontend
+cd frontend
+npm run dev
+```
+
+### Windows (PowerShell)
+
+`setup.sh` is Mac/Linux only, so set up by hand. First time on a clone:
+
+```powershell
+python -m venv venv
+venv\Scripts\activate
+pip install -r requirements.txt
+cd frontend; npm install
+```
+
+Then, each time:
+
+```powershell
+# Window 1: note server, from the repo root
+venv\Scripts\activate
+uvicorn backend.server:app --reload --port 8000
+
+# Window 2: frontend
+cd frontend
+npm run dev
+```
+
+If `activate` fails with "running scripts is disabled", run
+`Set-ExecutionPolicy -Scope CurrentUser RemoteSigned` once and try again.
+
+### Choosing the microphone
+
+The note server listens on the system's default input and prints the one it
+opens (`listening on '...'`). Plugging in headphones with a mic, like EarPods,
+makes the cable mic the default, and it is too quiet for the detector. To use
+another mic, set `EDUMUSIC_MIC` to any part of its name:
+
+```bash
+# Mac
+EDUMUSIC_MIC="MacBook Air Microphone" uvicorn backend.server:app --reload --port 8000
+```
+
+```powershell
+# Windows
+$env:EDUMUSIC_MIC="Microphone Array"; uvicorn backend.server:app --reload --port 8000
+```
+
+`python -m sounddevice` lists the mic names on your machine. The server reads
+the device list only at start-up, so restart it after plugging in or unplugging
+headphones.
+
 ## Workflow
 
 ### 1. Branch
@@ -28,7 +104,7 @@ Run them before you push — it is faster than waiting for CI to tell you.
 
 ```bash
 # Python tests, from the repo root
-source venv/bin/activate     # first time on a clone: ./setup.sh
+source venv/bin/activate     # Windows: venv\Scripts\activate
 pytest
 
 # Frontend lint + build
