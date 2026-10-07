@@ -32,7 +32,9 @@ function Home() {
         <div className="profile">
           <span>🔥 7(whenever streak gets implemented)</span> {/* reminders */}
           <span>⭐ Level 3(whenever xp system goes in)</span>
-          <span>👤</span>
+          <Link to="/profile" className="profile-link" aria-label="Go to your profile">
+            👤
+          </Link>
         </div>
       </header>
 
