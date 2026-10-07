@@ -1,0 +1,116 @@
+/*
+ * Glass theme (experiment): Apple-style "Liquid Glass" on top of the white
+ * theme. Everything lives in this one file so it is easy to try and easy to
+ * drop: delete this file and its import in main.jsx to go back.
+ *
+ * Selectors are prefixed with .app / .auth-page so they outrank each page's
+ * own `.card { background: ... }` rules without !important, while state rules
+ * that load later (like .lesson-card.current or :hover) still win.
+ */
+
+:root {
+  --glass-bg: rgba(255, 255, 255, 0.5);
+  --glass-bg-strong: rgba(255, 255, 255, 0.72);
+  --glass-border: rgba(255, 255, 255, 0.75);
+  --glass-blur: blur(22px) saturate(180%);
+  --glass-shadow:
+    0 10px 30px rgba(15, 23, 42, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.35);
+}
+
+/* Glass needs something behind it to blur: soft color light on white. */
+.app,
+.auth-page {
+  background:
+    radial-gradient(38rem 38rem at 8% 0%, rgba(255, 183, 77, 0.38), transparent 60%),
+    radial-gradient(34rem 34rem at 96% 18%, rgba(96, 165, 250, 0.32), transparent 60%),
+    radial-gradient(40rem 40rem at 45% 105%, rgba(52, 211, 153, 0.26), transparent 60%),
+    #ffffff;
+  background-attachment: fixed;
+}
+
+/* Cards, panels and secondary buttons across every page. */
+.app .lesson-modes,
+.app .lesson-section,
+.app .part-card,
+.app .string-card,
+.app .bow-card,
+.app .note-card,
+.app .practice-tip,
+.app .play-status,
+.app .play-card,
+.app .instrument-display,
+.app .continue-card,
+.app .action-button,
+.app .difficulty-tab,
+.app .course-progress,
+.app .lesson-card,
+.app .current-instrument,
+.app .instrument-card,
+.app .practice-card,
+.app .practice-result,
+.app .next-note-button,
+.app .mode-toggle,
+.app .profile-card,
+.app .stat-card,
+.app .instrument-progress-card,
+.app .achievement-card,
+.app .metronome-card,
+.app .tempo-adjust,
+.app .tempo-presets,
+.app .preset,
+.app .song-details,
+.app .song-note,
+.auth-page .auth-card {
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+}
+
+.auth-page .auth-field input {
+  background: var(--glass-bg-strong);
+  border: 1px solid rgba(15, 23, 42, 0.12);
+}
+
+/* Top bar: a frosted strip the page scrolls under. */
+.app .top-bar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(255, 255, 255, 0.45);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  border-bottom: 1px solid var(--glass-border);
+}
+
+/* Bottom nav: a floating glass pill, like the iOS tab bar. */
+.app .bottom-nav {
+  left: 50%;
+  right: auto;
+  bottom: 14px;
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: calc(100% - 24px);
+  height: 68px;
+  padding: 2px 6px;
+  gap: 2px;
+  border-radius: 34px;
+  background: rgba(255, 255, 255, 0.55);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+}
+
+.app .bottom-nav a {
+  width: 76px;
+  border-radius: 28px;
+}
+
+.app .bottom-nav a.active {
+  background: rgba(255, 255, 255, 0.85);
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.08);
+}
