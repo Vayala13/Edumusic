@@ -15,15 +15,15 @@
 
 .practice-intro>p:last-child {
     margin: 0;
-    color: #a8afc0;
+    color: #000000;
     font-size: 15px;
 }
 
 .practice-card {
     padding: 22px;
     border-radius: 18px;
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(0, 0, 0, 0.048);
+    border: 1px solid rgba(0, 0, 0, 0.064);
 }
 
 .practice-instrument {
@@ -50,7 +50,7 @@
 
 .practice-instrument p {
     margin: 0;
-    color: #8d94a8;
+    color: #000000;
     font-size: 13px;
 }
 
@@ -58,12 +58,12 @@
     margin-top: 25px;
     padding-top: 25px;
     text-align: center;
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    border-top: 1px solid rgba(0, 0, 0, 0.064);
 }
 
 .target-note-label {
     margin: 0 0 8px;
-    color: #f6b44b;
+    color: #b45309;
     font-size: 11px;
     font-weight: 700;
     letter-spacing: 1.2px;
@@ -78,7 +78,7 @@
 
 .target-note-description {
     margin: 0;
-    color: #8d94a8;
+    color: #000000;
     font-size: 13px;
 }
 
@@ -86,7 +86,7 @@
     margin-top: 30px;
     padding-top: 30px;
     text-align: center;
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    border-top: 1px solid rgba(0, 0, 0, 0.064);
 }
 
 .microphone-icon {
@@ -109,7 +109,7 @@
 .practice-listening p {
     max-width: 420px;
     margin: 0 auto 18px;
-    color: #8d94a8;
+    color: #000000;
     font-size: 13px;
     line-height: 1.5;
 }
@@ -134,13 +134,13 @@
     padding: 20px;
     text-align: center;
     border-radius: 14px;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.07);
+    background: rgba(0, 0, 0, 0.032);
+    border: 1px solid rgba(0, 0, 0, 0.056);
 }
 
 .practice-result-label {
     margin: 0 0 8px;
-    color: #8d94a8;
+    color: #000000;
     font-size: 10px;
     font-weight: 700;
     letter-spacing: 1.2px;
@@ -154,7 +154,7 @@
 
 .practice-feedback {
     margin: 0;
-    color: #a8afc0;
+    color: #000000;
     font-size: 13px;
 }
 
@@ -165,23 +165,23 @@
 
 .practice-progress {
     margin: 0 0 12px;
-    color: #8d94a8;
+    color: #000000;
     font-size: 12px;
 }
 
 .next-note-button {
     padding: 10px 20px;
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(0, 0, 0, 0.096);
     border-radius: 10px;
-    background: rgba(255, 255, 255, 0.06);
-    color: #ffffff;
+    background: rgba(0, 0, 0, 0.048);
+    color: #000000;
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
 }
 
 .next-note-button:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(0, 0, 0, 0.08);
 }
 
 /* ------------------------------------------------------------------ */
@@ -196,7 +196,7 @@
     justify-content: space-between;
     flex-wrap: wrap;
     gap: 15px;
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    border-top: 1px solid rgba(0, 0, 0, 0.064);
 }
 
 .mode-toggle {
@@ -204,8 +204,8 @@
     gap: 6px;
     padding: 4px;
     border-radius: 12px;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.07);
+    background: rgba(0, 0, 0, 0.032);
+    border: 1px solid rgba(0, 0, 0, 0.056);
 }
 
 .mode-button {
@@ -213,7 +213,7 @@
     border: 1px solid transparent;
     border-radius: 9px;
     background: transparent;
-    color: #a8afc0;
+    color: #000000;
     font-family: inherit;
     font-size: 13px;
     font-weight: 600;
@@ -221,29 +221,29 @@
 }
 
 .mode-button:hover {
-    color: #ffffff;
+    color: #000000;
 }
 
 .mode-button.active {
     border-color: rgba(246, 180, 75, 0.5);
     background: rgba(246, 180, 75, 0.12);
-    color: #f6b44b;
+    color: #b45309;
 }
 
 .note-picker {
     display: flex;
     align-items: center;
     gap: 10px;
-    color: #8d94a8;
+    color: #000000;
     font-size: 13px;
 }
 
 .note-picker select {
     padding: 8px 12px;
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(0, 0, 0, 0.096);
     border-radius: 10px;
-    background: #1b1d25;
-    color: #ffffff;
+    background: #ffffff;
+    color: #000000;
     font-family: inherit;
     font-size: 14px;
     font-weight: 600;
@@ -251,8 +251,8 @@
 }
 
 .note-picker select option {
-    background: #1b1d25;
-    color: #ffffff;
+    background: #ffffff;
+    color: #000000;
 }
 
 .mode-button:focus-visible,
@@ -272,7 +272,7 @@
     margin-top: 25px;
     padding: 35px 20px 10px;
     text-align: center;
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    border-top: 1px solid rgba(0, 0, 0, 0.064);
 }
 
 .practice-finished h3 {
@@ -282,6 +282,6 @@
 
 .practice-finished p {
     margin: 0 0 22px;
-    color: #8d94a8;
+    color: #000000;
     font-size: 14px;
 }

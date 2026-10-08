@@ -40,13 +40,6 @@ function Profile() {
 
   return (
     <div className="app">
-      <header className="top-bar">
-        <div className="logo">Profile</div>
-        <div className="profile">
-          <span>👤</span>
-        </div>
-      </header>
-
       <main className="profile-page">
         <section className="profile-intro">
           <p className="eyebrow">MY ACCOUNT</p>

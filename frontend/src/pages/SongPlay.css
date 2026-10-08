@@ -1,0 +1,108 @@
+.song-play {
+  min-height: 100vh;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 28px 24px 60px;
+  background: #ffffff;
+  color: #000000;
+}
+
+.song-play-header {
+  display: flex;
+  align-items: baseline;
+  gap: 18px;
+  margin-bottom: 18px;
+}
+
+.song-play-header h1 {
+  margin: 0;
+  font-size: 26px;
+}
+
+.song-play-back {
+  color: #000000;
+  text-decoration: none;
+  font-size: 15px;
+}
+
+.song-play-back:hover {
+  text-decoration: underline;
+}
+
+.staff {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.staff-row {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.song-play-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  margin-top: 28px;
+}
+
+.song-play-tempo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.song-play-tempo input {
+  width: 76px;
+  padding: 8px 10px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  font: inherit;
+  text-align: center;
+}
+
+.song-play-tempo input[aria-invalid="true"] {
+  border-color: #b91c1c;
+}
+
+.song-play-button {
+  min-width: 130px;
+  padding: 11px 22px;
+  border: none;
+  border-radius: 11px;
+  background: #f6b44b;
+  color: #17120a;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.song-play-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.song-play-button.stop,
+.song-play-button.secondary {
+  background: #e5e7eb;
+}
+
+.song-play-hint {
+  max-width: 560px;
+  margin: 10px auto 0;
+  text-align: center;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.song-play-status {
+  min-height: 24px;
+  margin: 16px 0 0;
+  text-align: center;
+  font-size: 16px;
+}

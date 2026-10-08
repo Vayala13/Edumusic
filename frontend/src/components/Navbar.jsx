@@ -20,6 +20,11 @@ function Navbar() {
         <span>Practice</span>
       </Link>
 
+      <Link className={location.pathname === "/songs" ? "active" : ""} to="/songs">
+        🎵
+        <span>Songs</span>
+      </Link>
+
       <Link className={location.pathname === "/closet" ? "active" : ""} to="/closet">
         🎒
         <span>Closet</span>

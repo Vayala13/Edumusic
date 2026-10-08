@@ -23,9 +23,19 @@ The tradeoff is that the server has to run on the same machine as the
 player, since it opens *its* microphone. That is fine for local use; if
 this is ever deployed, the browser would capture audio and stream frames
 here instead, and only `MicSession` below would need replacing.
+
+Which microphone: the system default input, unless EDUMUSIC_MIC names
+another (any part of its name works). Plugging in headphones with a mic,
+like EarPods, makes that the default, and a cable mic is too quiet for the
+detector; to keep listening on the laptop's mic instead:
+
+    EDUMUSIC_MIC="MacBook Air Microphone" uvicorn backend.server:app --reload --port 8000
+
+The server prints the microphone it opens each time listening starts.
 """
 
 import asyncio
+import os
 import queue
 import threading
 
@@ -129,11 +139,15 @@ class MicSession:
         def audio_callback(indata, frames, time_info, status):
             self._audio_q.put(indata[:, 0].copy())
 
-        self._stream = sd.InputStream(channels=1,
+        device = os.environ.get("EDUMUSIC_MIC") or None
+        self._stream = sd.InputStream(device=device,
+                                      channels=1,
                                       samplerate=self._samplerate,
                                       blocksize=self._blocksize,
                                       callback=audio_callback)
         self._stream.start()
+        name = sd.query_devices(self._stream.device)["name"]
+        print(f"EduMusic note server: listening on '{name}'", flush=True)
 
     def stop(self):
         self._stop.set()

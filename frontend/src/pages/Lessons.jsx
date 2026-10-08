@@ -14,9 +14,6 @@ function Lessons() {
   const instrumentName =
     instrument === "violin" ? "Violin" : "Trumpet";
 
-  const instrumentIcon =
-    instrument === "violin" ? "🎻" : "🎺";
-
   // Determine each lesson's status from saved progress
   const lessonStatuses = currentLessons.map((lesson, index) => {
     const completed = isLessonCompleted(
@@ -64,14 +61,6 @@ function Lessons() {
 
   return (
     <div className="app">
-
-      <header className="top-bar">
-        <div className="logo">Lessons</div>
-
-        <div className="profile">
-          <span>{instrumentIcon}</span>
-        </div>
-      </header>
 
       <main className="lessons-page">
 

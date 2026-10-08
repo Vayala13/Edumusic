@@ -15,7 +15,7 @@
 
 .profile-intro>p:last-child {
     margin: 0;
-    color: #a8afc0;
+    color: #000000;
     font-size: 15px;
 }
 
@@ -26,8 +26,8 @@
     padding: 22px;
     margin-bottom: 25px;
     border-radius: 18px;
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(0, 0, 0, 0.048);
+    border: 1px solid rgba(0, 0, 0, 0.064);
 }
 
 .profile-avatar {
@@ -49,7 +49,7 @@
 
 .profile-info p {
     margin: 0;
-    color: #a8afc0;
+    color: #000000;
     font-size: 14px;
 }
 
@@ -66,8 +66,8 @@
     gap: 12px;
     padding: 18px;
     border-radius: 16px;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.064);
 }
 
 .stat-icon {
@@ -81,7 +81,7 @@
 
 .stat-card p {
     margin: 0;
-    color: #8d94a8;
+    color: #000000;
     font-size: 12px;
 }
 
@@ -100,7 +100,7 @@
 
 .section-title p {
     margin: 0;
-    color: #8d94a8;
+    color: #000000;
     font-size: 13px;
 }
 
@@ -110,8 +110,8 @@
     gap: 18px;
     padding: 20px;
     border-radius: 16px;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.064);
 }
 
 .instrument-icon {
@@ -144,12 +144,12 @@
 
 .instrument-progress-header p {
     margin: 0;
-    color: #8d94a8;
+    color: #000000;
     font-size: 12px;
 }
 
 .instrument-progress-header>span {
-    color: #f6b44b;
+    color: #b45309;
     font-size: 13px;
     font-weight: 700;
 }
@@ -160,7 +160,7 @@
     margin-top: 12px;
     overflow: hidden;
     border-radius: 10px;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(0, 0, 0, 0.08);
 }
 
 .profile-progress-fill {
@@ -179,8 +179,8 @@
 .achievement-card {
     padding: 18px;
     border-radius: 16px;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.064);
 }
 
 .achievement-icon {
@@ -195,7 +195,7 @@
 
 .achievement-card p {
     margin: 0;
-    color: #8d94a8;
+    color: #000000;
     font-size: 12px;
     line-height: 1.4;
 }
@@ -214,7 +214,7 @@
   border: 1px solid rgba(255, 100, 100, 0.25);
   border-radius: 10px;
   background: rgba(255, 80, 80, 0.08);
-  color: #ff8f8f;
+  color: #b91c1c;
   font-family: inherit;
   font-size: 14px;
   font-weight: 700;

@@ -50,14 +50,6 @@ function Closet() {
 
   return (
     <div className="app">
-      <header className="top-bar">
-        <div className="logo">Your Closet</div>
-
-        <div className="profile">
-          <span>🎒</span>
-        </div>
-      </header>
-
       <main className="closet-page">
 
         <section className="closet-intro">
