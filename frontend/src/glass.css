@@ -4,33 +4,80 @@
  * drop: delete this file and its import in main.jsx to go back.
  *
  * Selectors are prefixed with .app / .auth-page so they outrank each page's
- * own `.card { background: ... }` rules without !important, while state rules
- * that load later (like .lesson-card.current or :hover) still win.
+ * own `.card { background: ... }` rules without !important. This file loads
+ * after the page stylesheets, so it also beats equal-specificity state rules
+ * like `.lesson-card.current`; those states are restyled as tinted glass at
+ * the bottom of this file so they stay visible.
  */
 
 :root {
-  --glass-bg: rgba(255, 255, 255, 0.5);
-  --glass-bg-strong: rgba(255, 255, 255, 0.72);
-  --glass-border: rgba(255, 255, 255, 0.75);
-  --glass-blur: blur(22px) saturate(180%);
+  /* Clear glass: bright at the top-left where light hits, thinner below. */
+  --glass-fill:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0.24) 45%, rgba(255, 255, 255, 0.14) 100%);
+  --glass-fill-strong:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.82) 0%, rgba(255, 255, 255, 0.6) 100%);
+  --glass-blur: blur(28px) saturate(200%) brightness(1.06);
   --glass-shadow:
-    0 10px 30px rgba(15, 23, 42, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.9),
-    inset 0 -1px 0 rgba(255, 255, 255, 0.35);
+    0 12px 40px rgba(31, 41, 90, 0.12),
+    0 2px 6px rgba(31, 41, 90, 0.06),
+    inset 0 1px 1px rgba(255, 255, 255, 0.95),
+    inset 0 -10px 24px rgba(255, 255, 255, 0.18),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.18);
+  /* The bright rim: hot at the top-left and bottom-right corners, fading
+     to nearly nothing along the sides, like light catching a glass edge. */
+  --glass-rim:
+    linear-gradient(135deg,
+      rgba(255, 255, 255, 1) 0%,
+      rgba(255, 255, 255, 0.35) 22%,
+      rgba(255, 255, 255, 0.06) 50%,
+      rgba(255, 255, 255, 0.3) 78%,
+      rgba(255, 255, 255, 0.85) 100%);
+  --glass-radius: 24px;
 }
 
-/* Glass needs something behind it to blur: soft color light on white. */
+/* Glass needs something colorful behind it to blur and bend. */
 .app,
 .auth-page {
   background:
-    radial-gradient(38rem 38rem at 8% 0%, rgba(255, 183, 77, 0.38), transparent 60%),
-    radial-gradient(34rem 34rem at 96% 18%, rgba(96, 165, 250, 0.32), transparent 60%),
-    radial-gradient(40rem 40rem at 45% 105%, rgba(52, 211, 153, 0.26), transparent 60%),
-    #ffffff;
+    radial-gradient(36rem 36rem at 6% -4%, rgba(255, 170, 60, 0.55), transparent 62%),
+    radial-gradient(32rem 32rem at 98% 14%, rgba(80, 150, 255, 0.5), transparent 62%),
+    radial-gradient(30rem 30rem at 70% 70%, rgba(236, 110, 200, 0.3), transparent 62%),
+    radial-gradient(40rem 40rem at 30% 108%, rgba(40, 205, 150, 0.42), transparent 62%),
+    #f7f8fc;
   background-attachment: fixed;
 }
 
-/* Cards, panels and secondary buttons across every page. */
+/* Panels: the large cards and sections on every page. */
+.app .lesson-modes,
+.app .lesson-section,
+.app .part-card,
+.app .string-card,
+.app .bow-card,
+.app .note-card,
+.app .practice-tip,
+.app .play-status,
+.app .play-card,
+.app .instrument-display,
+.app .continue-card,
+.app .course-progress,
+.app .lesson-card,
+.app .current-instrument,
+.app .instrument-card,
+.app .practice-card,
+.app .practice-result,
+.app .profile-card,
+.app .stat-card,
+.app .instrument-progress-card,
+.app .achievement-card,
+.app .metronome-card,
+.app .tempo-adjust,
+.app .tempo-presets,
+.app .song-details,
+.auth-page .auth-card {
+  border-radius: var(--glass-radius);
+}
+
+/* Panels and controls share the glass material. */
 .app .lesson-modes,
 .app .lesson-section,
 .app .part-card,
@@ -63,16 +110,94 @@
 .app .song-details,
 .app .song-note,
 .auth-page .auth-card {
-  background: var(--glass-bg);
+  position: relative;
+  background: var(--glass-fill);
   -webkit-backdrop-filter: var(--glass-blur);
   backdrop-filter: var(--glass-blur);
-  border: 1px solid var(--glass-border);
+  border: 1px solid transparent;
   box-shadow: var(--glass-shadow);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+}
+
+/* The rim is drawn as a masked gradient ring so it can fade around the edge,
+   which a plain border cannot do. It covers only the 1.5px edge, so it never
+   sits over the card's content. */
+.app .lesson-modes::before,
+.app .lesson-section::before,
+.app .part-card::before,
+.app .string-card::before,
+.app .bow-card::before,
+.app .note-card::before,
+.app .practice-tip::before,
+.app .play-status::before,
+.app .play-card::before,
+.app .instrument-display::before,
+.app .continue-card::before,
+.app .action-button::before,
+.app .difficulty-tab::before,
+.app .course-progress::before,
+.app .lesson-card::before,
+.app .current-instrument::before,
+.app .instrument-card::before,
+.app .practice-card::before,
+.app .practice-result::before,
+.app .next-note-button::before,
+.app .mode-toggle::before,
+.app .profile-card::before,
+.app .stat-card::before,
+.app .instrument-progress-card::before,
+.app .achievement-card::before,
+.app .metronome-card::before,
+.app .tempo-adjust::before,
+.app .tempo-presets::before,
+.app .preset::before,
+.app .song-details::before,
+.app .song-note::before,
+.auth-page .auth-card::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  padding: 1.5px;
+  border-radius: inherit;
+  background: var(--glass-rim);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+  pointer-events: none;
+}
+
+/* Interactive glass lifts toward you on hover and presses in on click. */
+.app .action-button:hover,
+.app .next-note-button:hover,
+.app .preset:hover,
+.app .difficulty-tab:hover,
+.app .lesson-card:not(.locked):hover,
+.app .instrument-card:hover,
+.app .continue-card:hover {
+  transform: translateY(-2px);
+  background: var(--glass-fill-strong);
+  box-shadow:
+    0 18px 48px rgba(31, 41, 90, 0.16),
+    0 3px 8px rgba(31, 41, 90, 0.08),
+    inset 0 1px 1px rgba(255, 255, 255, 1),
+    inset 0 -10px 24px rgba(255, 255, 255, 0.22);
+}
+
+.app .action-button:active,
+.app .next-note-button:active,
+.app .preset:active,
+.app .difficulty-tab:active,
+.app .lesson-card:not(.locked):active,
+.app .instrument-card:active {
+  transform: scale(0.98);
 }
 
 .auth-page .auth-field input {
-  background: var(--glass-bg-strong);
-  border: 1px solid rgba(15, 23, 42, 0.12);
+  background: var(--glass-fill-strong);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  box-shadow: inset 0 1px 2px rgba(31, 41, 90, 0.08);
 }
 
 /* Top bar: a frosted strip the page scrolls under. */
@@ -80,37 +205,69 @@
   position: sticky;
   top: 0;
   z-index: 50;
-  background: rgba(255, 255, 255, 0.45);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.35));
   -webkit-backdrop-filter: var(--glass-blur);
   backdrop-filter: var(--glass-blur);
-  border-bottom: 1px solid var(--glass-border);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.7);
+  box-shadow: 0 1px 0 rgba(31, 41, 90, 0.05);
 }
 
 /* Bottom nav: a floating glass pill, like the iOS tab bar. */
 .app .bottom-nav {
   left: 50%;
   right: auto;
-  bottom: 14px;
+  bottom: 16px;
   transform: translateX(-50%);
   width: max-content;
   max-width: calc(100% - 24px);
   height: 68px;
-  padding: 2px 6px;
+  padding: 4px 6px;
   gap: 2px;
   border-radius: 34px;
-  background: rgba(255, 255, 255, 0.55);
+  background: var(--glass-fill);
   -webkit-backdrop-filter: var(--glass-blur);
   backdrop-filter: var(--glass-blur);
-  border: 1px solid var(--glass-border);
-  box-shadow: var(--glass-shadow);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  box-shadow:
+    0 16px 44px rgba(31, 41, 90, 0.18),
+    inset 0 1px 1px rgba(255, 255, 255, 1),
+    inset 0 -8px 18px rgba(255, 255, 255, 0.2);
 }
 
 .app .bottom-nav a {
   width: 76px;
   border-radius: 28px;
+  transition: background 0.2s ease, box-shadow 0.2s ease;
 }
 
+/* The selected tab is a brighter glass bubble inside the pill. */
 .app .bottom-nav a.active {
-  background: rgba(255, 255, 255, 0.85);
-  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.08);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.7));
+  box-shadow:
+    0 4px 14px rgba(31, 41, 90, 0.12),
+    inset 0 1px 1px rgba(255, 255, 255, 1);
+}
+
+/* Selected / current states, restyled as tinted glass so they still stand
+   out. Colors match the page stylesheets (blue #315eaa, amber #f6b44b). */
+.app .difficulty-tab.active {
+  background: linear-gradient(145deg, rgba(70, 120, 210, 0.92), rgba(49, 94, 170, 0.85));
+  color: #ffffff;
+}
+
+.app .lesson-card.current {
+  background: linear-gradient(145deg, rgba(120, 165, 240, 0.55), rgba(49, 94, 170, 0.28));
+}
+
+.app .preset.active,
+.app .instrument-card.selected {
+  background: linear-gradient(145deg, rgba(255, 205, 120, 0.6), rgba(246, 180, 75, 0.25));
+}
+
+/* Respect a system request for less transparency: fall back to solid cards. */
+@media (prefers-reduced-transparency: reduce) {
+  :root {
+    --glass-fill: rgba(255, 255, 255, 0.94);
+    --glass-fill-strong: #ffffff;
+  }
 }
