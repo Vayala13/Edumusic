@@ -20,6 +20,25 @@ const liquidGlassCarouselDefaultItems = [
     { title: "Project Seven", src: photo("1527630941-4a229fd674ab"), aspect: PORTRAIT_ASPECT },
     { title: "Project Eight", src: photo("1603786420263-ad59136a7409"), aspect: PORTRAIT_ASPECT },
 ];
+// Glass treatment for each cover, injected into the covers' basic material:
+// rounded corners, a frosted sheen from the top-left, and a thin bright rim
+// (brightest along the top), in the style of Apple's Liquid Glass.
+const COVER_GLASS_GLSL = /* glsl */ `
+#ifdef USE_MAP
+  vec2 cuv = vMapUv;
+  vec2 cp = (cuv - 0.5) * vec2(uCoverAspect, 1.0);
+  vec2 ch = vec2(uCoverAspect * 0.5, 0.5);
+  float cr = 0.045;
+  vec2 cq = abs(cp) - ch + cr;
+  float cd = min(max(cq.x, cq.y), 0.0) + length(max(cq, 0.0)) - cr;
+  float sheenT = (cuv.x + (1.0 - cuv.y)) * 0.5;
+  diffuseColor.rgb = mix(diffuseColor.rgb, vec3(1.0), 0.28 * (1.0 - smoothstep(0.0, 0.55, sheenT)));
+  float rim = 1.0 - smoothstep(0.0, 0.012, -cd);
+  diffuseColor.rgb = mix(diffuseColor.rgb, vec3(1.0), rim * (0.45 + 0.35 * cuv.y));
+  diffuseColor.a *= 1.0 - smoothstep(-0.002, 0.002, cd);
+#endif
+`;
+
 // Tuned to look like a clear soap bubble (the original was a milky glass lens
 // with a blue ring): no white glow, no ring or outline, and no edge bending,
 // so covers stay flat as they pass under the lens edge.
@@ -444,6 +463,13 @@ function createCarousel(mount, cursorElement, options) {
                 color: 0xdddddd,
                 transparent: true,
             });
+            const coverAspect = { value: at(sources, i).aspect };
+            mat.onBeforeCompile = (shader) => {
+                shader.uniforms.uCoverAspect = coverAspect;
+                shader.fragmentShader = shader.fragmentShader
+                    .replace("#include <common>", "#include <common>\nuniform float uCoverAspect;")
+                    .replace("#include <map_fragment>", "#include <map_fragment>\n" + COVER_GLASS_GLSL);
+            };
             const mesh = new THREE.Mesh(new THREE.PlaneGeometry(1, 1, 1, 1), mat);
             mesh.visible = false;
             scene.add(mesh);
