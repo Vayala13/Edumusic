@@ -3,7 +3,7 @@ import Navbar from "../components/Navbar";
 import { useInstrument } from "../context/useInstrument";
 import "./Practice.css";
 import { NOTES_WS_URL, isMatch, playedNote } from "../utils/notes";
-import { usePracticeStats } from "../context/PracticeStatsContext";
+import { usePracticeStats } from "../context/usePracticeStats";
 
 // Every violin note a beginner is likely to reach, lowest to highest.
 const VIOLIN_NOTES = [

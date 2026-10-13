@@ -1,4 +1,3 @@
-
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
@@ -7,7 +6,7 @@ import "./glass.css";
 import { InstrumentProvider } from "./context/InstrumentContext";
 import { ProgressProvider } from "./context/ProgressContext";
 import { AuthProvider } from "./context/AuthContext";
-import { PracticeStatsProvider } from "./context/PracticeStatsContext";
+import { PracticeStatsProvider } from "./context/PracticeStatsContext.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>

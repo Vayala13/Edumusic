@@ -8,8 +8,7 @@ import { useEffect, useState } from "react";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import "./Profile.css";
-import { usePracticeStats } from "../context/PracticeStatsContext";
-
+import { usePracticeStats } from "../context/usePracticeStats";
 function Profile() {
   const navigate = useNavigate();
   const { logout, user } = useAuth();

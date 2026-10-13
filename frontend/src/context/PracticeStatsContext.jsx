@@ -1,7 +1,5 @@
 
 import {
-    createContext,
-    useContext,
     useEffect,
     useRef,
     useState,
@@ -9,16 +7,8 @@ import {
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import { useAuth } from "./useAuth";
-
-const PracticeStatsContext = createContext(null);
-
-function getLocalDateKey(date = new Date()) {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-
-    return `${year}-${month}-${day}`;
-}
+import { getLocalDateKey } from "./practiceStatsUtils";
+import { PracticeStatsContext } from "./practiceStatsContext";
 
 const EMPTY_STATS = {
     xp: 0,
@@ -29,11 +19,7 @@ const EMPTY_STATS = {
     practiceDates: [],
 };
 
-export function usePracticeStats() {
-    return useContext(PracticeStatsContext);
-}
-
-export function PracticeStatsProvider({ children }) {
+function PracticeStatsProvider({ children }) {
     const { user } = useAuth();
     const [stats, setStats] = useState(EMPTY_STATS);
     const [loadingStats, setLoadingStats] = useState(true);
@@ -63,9 +49,10 @@ export function PracticeStatsProvider({ children }) {
                 const loadedStats = {
                     ...EMPTY_STATS,
                     ...savedData,
-                    xp: typeof savedData.xp === "number"
-                        ? savedData.xp
-                        : 0,
+                    xp:
+                        typeof savedData.xp === "number"
+                            ? savedData.xp
+                            : 0,
                     notesLearned: {
                         ...EMPTY_STATS.notesLearned,
                         ...(savedData.notesLearned || {}),
@@ -187,3 +174,5 @@ export function PracticeStatsProvider({ children }) {
         </PracticeStatsContext.Provider>
     );
 }
+
+export { PracticeStatsProvider };
