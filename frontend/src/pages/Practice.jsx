@@ -3,6 +3,7 @@ import Navbar from "../components/Navbar";
 import { useInstrument } from "../context/useInstrument";
 import "./Practice.css";
 import { NOTES_WS_URL, isMatch, playedNote } from "../utils/notes";
+import { usePracticeStats } from "../context/PracticeStatsContext";
 
 // Every violin note a beginner is likely to reach, lowest to highest.
 const VIOLIN_NOTES = [
@@ -26,6 +27,7 @@ function shuffle(list) {
 
 function Practice() {
   const { instrument } = useInstrument();
+  const { recordSuccessfulNote } = usePracticeStats();
 
   const [isListening, setIsListening] = useState(false);
   const [currentNote, setCurrentNote] = useState(0);
@@ -119,6 +121,11 @@ function Practice() {
 
       if (isMatch(played, targetNote)) {
         setPracticeStatus("correct");
+
+        recordSuccessfulNote(instrument, targetNote).catch((error) => {
+          console.error("Could not record successful note:", error);
+        });
+
         closeSocket(); // right note: stop listening
       } else {
         setPracticeStatus("incorrect");
