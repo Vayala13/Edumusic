@@ -1,6 +1,5 @@
-
 import { useContext } from "react";
-import { PracticeStatsContext } from "./PracticeStatsContext";
+import { PracticeStatsContext } from "./practiceStatsContext";
 
 export function usePracticeStats() {
     return useContext(PracticeStatsContext);
