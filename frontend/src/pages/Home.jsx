@@ -14,7 +14,6 @@ function Home() {
     stats,
     loadingStats,
     dayStreak,
-    allNotesLearned,
 } = usePracticeStats();
 
   const isViolin = instrument === "violin";
