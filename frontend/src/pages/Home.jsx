@@ -3,13 +3,24 @@ import Navbar from "../components/Navbar";
 import { useInstrument } from "../context/useInstrument";
 import { useProgress } from "../context/useProgress";
 import { lessons } from "../data/lessons";
+import { usePracticeStats } from "../context/usePracticeStats";
 import "./Home.css";
 
 function Home() {
   const { instrument } = useInstrument();
   const { isLessonCompleted } = useProgress();
 
+  const {
+    stats,
+    loadingStats,
+    dayStreak,
+    allNotesLearned,
+} = usePracticeStats();
+
   const isViolin = instrument === "violin";
+
+  const xp = stats?.xp ?? 0;
+  const level = Math.floor(xp / 100) + 1;
 
   const instrumentName = isViolin ? "Violin" : "Trumpet";
   const instrumentIcon = isViolin ? "🎻" : "🎺";
@@ -30,8 +41,8 @@ function Home() {
         <div className="logo">Edumusic</div>
 
         <div className="profile">
-          <span>🔥 7(whenever streak gets implemented)</span> {/* reminders */}
-          <span>⭐ Level 3(whenever xp system goes in)</span>
+          <span>🔥 {loadingStats ? "…" : dayStreak} day streak </span>
+          <span>⭐ {loadingStats ? "…" : `Level ${level} · ${xp} XP`}</span>
           <Link to="/profile" className="profile-link" aria-label="Go to your profile">
             👤
           </Link>
