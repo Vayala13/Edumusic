@@ -6,13 +6,16 @@ import "./glass.css";
 import { InstrumentProvider } from "./context/InstrumentContext";
 import { ProgressProvider } from "./context/ProgressContext";
 import { AuthProvider } from "./context/AuthContext";
+import { PracticeStatsProvider } from "./context/PracticeStatsContext.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-<React.StrictMode>
+  <React.StrictMode>
     <AuthProvider>
       <InstrumentProvider>
         <ProgressProvider>
-          <App />
+          <PracticeStatsProvider>
+            <App />
+          </PracticeStatsProvider>
         </ProgressProvider>
       </InstrumentProvider>
     </AuthProvider>
