@@ -285,3 +285,56 @@
     color: #000000;
     font-size: 14px;
 }
+
+/* Musical notation */
+.staff-note {
+    width: 100%;
+    max-width: 430px;
+    margin: 0 auto 8px;
+    text-align: center;
+}
+
+.music-staff {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+}
+
+.staff-line,
+.ledger-line {
+    stroke: #252525;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+}
+
+.ledger-line {
+    stroke-width: 1.5;
+}
+
+.treble-clef {
+    fill: #252525;
+    font-family: "Noto Music", "Bravura", "Segoe UI Symbol", serif;
+    font-size: 76px;
+}
+
+.note-head {
+    fill: #252525;
+    stroke: #252525;
+    stroke-width: 1;
+}
+
+.note-accidental {
+    fill: #252525;
+    font-family: "Segoe UI Symbol", serif;
+    font-size: 27px;
+    text-anchor: middle;
+}
+
+.staff-note-name {
+    margin-top: -3px;
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1.3;
+}
+
