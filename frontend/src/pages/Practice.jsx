@@ -25,6 +25,99 @@ function shuffle(list) {
   return copy;
 }
 
+const LETTER_INDEX = { C: 0, D: 1, E: 2, F: 3, G: 4, A: 5, B: 6 };
+
+function StaffNote({ note }) {
+
+  const match = /^([A-G])([#b]?)(-?\d+)?$/.exec(note);
+  const letter = match?.[1] || "C";
+  const accidental = match?.[2] || "";
+  const octave = match?.[3] ? Number(match[3]) : 4;
+  const diatonicPosition =
+    octave * 7 + LETTER_INDEX[letter] - (4 * 7 + LETTER_INDEX.E);
+
+  // Each diatonic step is one staff space (9 SVG units).
+  const noteY = 120 - diatonicPosition * 9;
+  const staffLines = [48, 66, 84, 102, 120];
+
+  const ledgerLines = [];
+  if (diatonicPosition < -1) {
+    for (let step = -2; step >= diatonicPosition; step -= 2) {
+      ledgerLines.push(120 - step * 9);
+    }
+  } else if (diatonicPosition > 9) {
+    for (let step = 10; step <= diatonicPosition; step += 2) {
+      ledgerLines.push(120 - step * 9);
+    }
+  }
+
+  return (
+    <div className="staff-note">
+      <svg
+        className="music-staff"
+        viewBox="0 0 340 190"
+        role="img"
+        aria-label={`${note} shown on a treble-clef staff`}
+      >
+        {staffLines.map((y) => (
+          <line
+            key={y}
+            x1="28"
+            y1={y}
+            x2="312"
+            y2={y}
+            className="staff-line"
+          />
+        ))}
+
+        <text x="34" y="112" className="treble-clef">
+          𝄞
+        </text>
+
+        {ledgerLines.map((y) => (
+          <line
+            key={y}
+            x1="174"
+            y1={y}
+            x2="218"
+            y2={y}
+            className="ledger-line"
+          />
+        ))}
+
+        {accidental && (
+          <text x="157" y={noteY + 6} className="note-accidental">
+            {accidental === "b" ? "♭" : "♯"}
+          </text>
+        )}
+
+        {/* A quarter-note stem points up for notes on/below the middle line,
+            and down for notes above it. Draw it behind the notehead. */}
+        <line
+          x1={noteY >= 84 ? 206 : 190}
+          y1={noteY}
+          x2={noteY >= 84 ? 206 : 190}
+          y2={noteY >= 84 ? noteY - 36 : noteY + 36}
+          className="note-stem"
+          stroke="currentColor"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+        />
+        <ellipse
+          cx="198"
+          cy={noteY}
+          rx="9"
+          ry="6.5"
+          transform={`rotate(-20 198 ${noteY})`}
+          className="note-head"
+        />
+      </svg>
+
+      <div className="staff-note-name">{letter}{accidental}</div>
+    </div>
+  );
+}
+
 function Practice() {
   const { instrument } = useInstrument();
   const { recordSuccessfulNote } = usePracticeStats();
@@ -213,7 +306,13 @@ function Practice() {
               <button
                 className={mode === "random" ? "mode-button active" : "mode-button"}
                 aria-pressed={mode === "random"}
-                onClick={() => switchMode("random")}
+                onClick={() => {
+                  if (mode !== "random") {
+                    switchMode("random");
+                  } else {
+                    startRandomRound();
+                  }
+                }}
               >
                 🎲 Random
               </button>
@@ -261,9 +360,9 @@ function Practice() {
             <>
               <div className="target-note">
                 <p className="target-note-label">PLAY THIS NOTE</p>
-                <div className="target-note-value">{targetNote}</div>
+                <StaffNote note={targetNote} instrument={instrument} />
                 <p className="target-note-description">
-                  Play the note shown above.
+                  Play the note shown on the staff.
                 </p>
               </div>
 
