@@ -43,7 +43,7 @@
   flex-shrink: 0;
 
   border-radius: 16px;
-  background: rgba(246, 180, 75, 0.1);
+  background: rgba(var(--accent-rgb), 0.1);
 
   font-size: 52px;
 }
@@ -84,7 +84,7 @@
   height: 100%;
 
   border-radius: inherit;
-  background: #f6b44b;
+  background: var(--accent);
 }
 
 .instrument-progress span {
@@ -103,7 +103,7 @@
   flex-shrink: 0;
 
   border-radius: 50%;
-  background: #f6b44b;
+  background: var(--accent);
 
   color: #17120a;
   text-decoration: none;
@@ -150,8 +150,8 @@
 }
 
 .instrument-card.selected {
-  border-color: rgba(246, 180, 75, 0.45);
-  background: rgba(246, 180, 75, 0.08);
+  border-color: rgba(var(--accent-rgb), 0.45);
+  background: rgba(var(--accent-rgb), 0.08);
 }
 
 .instrument-card-icon {
@@ -174,7 +174,7 @@
   top: 12px;
   right: 12px;
 
-  color: #b45309;
+  color: var(--accent-dark);
   font-size: 10px;
   font-weight: 700;
   text-transform: uppercase;
@@ -197,10 +197,11 @@
 .add-instrument:hover {
   color: #000000;
   background: rgba(0, 0, 0, 0.064);
-  border-color: rgba(246, 180, 75, 0.3);
+  border-color: rgba(var(--accent-rgb), 0.3);
 }
 
 .add-icon {
   font-size: 32px;
-  color: #b45309;
+  color: var(--accent-dark);
 }
+

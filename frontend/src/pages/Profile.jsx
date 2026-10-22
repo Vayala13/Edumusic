@@ -9,11 +9,24 @@ import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import "./Profile.css";
 import { usePracticeStats } from "../context/usePracticeStats";
+import { useTheme } from "../context/useTheme";
+
+// Preview colors only, for the little swatch dot below. They mirror the
+// --accent / --page-bg values set for each theme in App.css and glass.css —
+// keep the two in sync if a theme's colors change there.
+const THEME_OPTIONS = [
+  { value: "default", label: "Default", preview: "#f6b44b" },
+  { value: "red", label: "Red", preview: "#ef4444" },
+  { value: "green", label: "Green", preview: "#22c55e" },
+  { value: "black", label: "Black", preview: "#0b0b0d" },
+];
+
 function Profile() {
   const navigate = useNavigate();
   const { logout, user } = useAuth();
   const { instrument } = useInstrument();
   const { progress } = useProgress();
+  const { theme, setTheme } = useTheme();
 
   const {
     stats,
@@ -265,6 +278,36 @@ function Profile() {
                 <p>Complete your first practice session.</p>
               </div>
             </div>
+          </div>
+        </section>
+
+        <section className="profile-section">
+          <div className="section-title">
+            <h2>Appearance</h2>
+            <p>Choose a background theme for the app.</p>
+          </div>
+
+          <div className="theme-swatches">
+            {THEME_OPTIONS.map((option) => (
+              <button
+                key={option.value}
+                type="button"
+                className={
+                  "theme-swatch theme-swatch-" +
+                  option.value +
+                  (theme === option.value ? " selected" : "")
+                }
+                onClick={() => setTheme(option.value)}
+                aria-pressed={theme === option.value}
+              >
+                <span
+                  className="theme-swatch-preview"
+                  style={{ background: option.preview }}
+                  aria-hidden="true"
+                />
+                <span className="theme-swatch-label">{option.label}</span>
+              </button>
+            ))}
           </div>
         </section>
 
