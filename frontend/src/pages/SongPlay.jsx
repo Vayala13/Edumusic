@@ -20,6 +20,22 @@ function SongPlay() {
   const song = songs.find((s) => s.id === songId);
   const { instrument } = useInstrument();
 
+  const instrumentDetails = {
+    violin: { name: "Violin", icon: "🎻" },
+    trumpet: { name: "Trumpet", icon: "🎺" },
+    guitar: { name: "Guitar", icon: "🎸" },
+    ukulele: { name: "Ukulele", icon: "🪕" },
+  };
+
+  const currentInstrument =
+    instrumentDetails[instrument] || instrumentDetails.violin;
+
+  const instrumentIcon = currentInstrument.icon;
+  const instrumentName = currentInstrument.name;
+
+  const isSongPlayAvailable =
+    instrument === "violin" || instrument === "trumpet";
+
   const [tempoInput, setTempoInput] = useState(String(DEFAULT_TEMPO));
   // "listen": the whole song plays, mic off.
   // "play": backing only (your part taken out), mic on and notes scored.
@@ -70,7 +86,6 @@ function SongPlay() {
     return <Navigate to="/songs" replace />;
   }
 
-  const instrumentIcon = instrument === "violin" ? "🎻" : "🎺";
   const totalBeats = starts[starts.length - 1] + song.beats[song.beats.length - 1];
   const playable = playableNotes(song).length;
   const hitCount = hits.filter(Boolean).length;
@@ -224,6 +239,29 @@ function SongPlay() {
     statusText = "Lost the connection to the pitch detector. Start the server, then try again.";
   }
 
+  if (!isSongPlayAvailable) {
+    return (
+      <div className="song-play">
+        <header className="song-play-header">
+          <Link to="/songs" className="song-play-back">
+            ← Songs
+          </Link>
+          <h1>{song.title}</h1>
+        </header>
+
+        <section className="practice-finished">
+          <h2>
+            {instrumentIcon} {instrumentName}
+          </h2>
+          <h3>Song practice coming soon!</h3>
+          <p>
+            Song practice for {instrumentName} will be available
+            when its lessons and instrument support are added.
+          </p>
+        </section>
+      </div>
+    );
+  }
   return (
     <div className="song-play">
       <header className="song-play-header">

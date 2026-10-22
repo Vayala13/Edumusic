@@ -9,10 +9,17 @@ function Lessons() {
   const { instrument } = useInstrument();
   const { isLessonCompleted } = useProgress();
 
-  const currentLessons = lessons[instrument];
+  const currentLessons = lessons[instrument] || [];
+
+  const instrumentDetails = {
+    violin: { name: "Violin" },
+    trumpet: { name: "Trumpet" },
+    guitar: { name: "Guitar" },
+    ukulele: { name: "Ukulele" },
+  };
 
   const instrumentName =
-    instrument === "violin" ? "Violin" : "Trumpet";
+    instrumentDetails[instrument]?.name || "Violin";
 
   // Determine each lesson's status from saved progress
   const lessonStatuses = currentLessons.map((lesson, index) => {
@@ -55,9 +62,12 @@ function Lessons() {
     (lesson) => lesson.status === "completed"
   ).length;
 
-  const progress = Math.round(
-    (completedLessons / currentLessons.length) * 100
-  );
+  const progress =
+    currentLessons.length > 0
+      ? Math.round(
+        (completedLessons / currentLessons.length) * 100
+      )
+      : 0;
 
   return (
     <div className="app">
@@ -117,19 +127,28 @@ function Lessons() {
         </section>
 
         <section className="lesson-list">
-
-          {lessonStatuses.map((lesson) => (
-            <Lesson
-              key={lesson.number}
-              number={lesson.number}
-              icon={lesson.icon}
-              title={lesson.title}
-              description={lesson.description}
-              status={lesson.status}
-              link={lesson.link}
-            />
-          ))}
-
+          {lessonStatuses.length > 0 ? (
+            lessonStatuses.map((lesson) => (
+              <Lesson
+                key={lesson.number}
+                number={lesson.number}
+                icon={lesson.icon}
+                title={lesson.title}
+                description={lesson.description}
+                status={lesson.status}
+                link={lesson.link}
+              />
+            ))
+          ) : (
+            <div className="lesson-card">
+              <div className="lesson-info">
+                <h2>Lessons coming soon!</h2>
+                <p>
+                  Beginner lessons for {instrumentName} will be added soon.
+                </p>
+              </div>
+            </div>
+          )}
         </section>
 
       </main>
