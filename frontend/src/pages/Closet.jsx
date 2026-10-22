@@ -23,35 +23,26 @@ function Closet() {
     );
   };
 
-  const violinProgress = getInstrumentProgress("violin");
-  const trumpetProgress = getInstrumentProgress("trumpet");
+  const instruments = [
+    { id: "violin", name: "Violin", icon: "🎻" },
+    { id: "trumpet", name: "Trumpet", icon: "🎺" },
+    { id: "guitar", name: "Guitar", icon: "🎸" },
+    { id: "ukulele", name: "Ukulele", icon: "🪕" },
+  ];
 
-  const currentProgress =
-    instrument === "violin"
-      ? violinProgress
-      : trumpetProgress;
+  const currentInstrument =
+    instruments.find((item) => item.id === instrument) ||
+    instruments[0];
 
+  const currentProgress = getInstrumentProgress(instrument);
   const currentCompletedLessons =
     progress[instrument]?.length || 0;
-
   const currentTotalLessons =
     lessons[instrument]?.length || 0;
-
-  const instrumentName =
-    instrument === "violin"
-      ? "Violin"
-      : "Trumpet";
-
-  const instrumentIcon =
-    instrument === "violin"
-      ? "🎻"
-      : "🎺";
-
 
   return (
     <div className="app">
       <main className="closet-page">
-
         <section className="closet-intro">
           <p className="eyebrow">MY INSTRUMENTS</p>
           <h1>Your Closet</h1>
@@ -61,29 +52,27 @@ function Closet() {
         {/* Currently selected instrument */}
         <section className="current-instrument">
           <div className="instrument-image">
-            {instrumentIcon}
+            {currentInstrument.icon}
           </div>
 
           <div className="instrument-info">
-            <h2>
-              {instrumentName}
-            </h2>
+            <h2>{currentInstrument.name}</h2>
 
             <p>Level 1 • Beginner</p>
 
             <div className="instrument-progress">
               <div className="closet-progress">
-                <div className="progress-fill"
-                style={{
-                  width: `${currentProgress}%`,
-                }}
-                ></div>
+                <div
+                  className="progress-fill"
+                  style={{
+                    width: `${currentProgress}%`,
+                  }}
+                />
               </div>
 
-              <span>
-                {currentProgress}%
-              </span>
+              <span>{currentProgress}%</span>
             </div>
+
             <p className="closet-lesson-count">
               {currentCompletedLessons} of {currentTotalLessons} lessons completed
             </p>
@@ -99,48 +88,35 @@ function Closet() {
           <h2 className="section-heading">My Instruments</h2>
 
           <div className="instrument-grid">
+            {instruments.map((item) => {
+              const itemProgress = getInstrumentProgress(item.id);
 
-            {/* Violin */}
-            <button
-              className={`instrument-card ${
-                instrument === "violin" ? "selected" : ""
-              }`}
-              onClick={() => changeInstrument("violin")}
-            >
-              <span className="instrument-card-icon">🎻</span>
+              return (
+                <button
+                  key={item.id}
+                  className={`instrument-card ${instrument === item.id ? "selected" : ""
+                    }`}
+                  onClick={() => changeInstrument(item.id)}
+                >
+                  <span className="instrument-card-icon">
+                    {item.icon}
+                  </span>
 
-              <div>
-                <h3>Violin</h3>
-                <p>Level 1 • {violinProgress}%</p>
-              </div>
+                  <div>
+                    <h3>{item.name}</h3>
+                    <p>Level 1 • {itemProgress}%</p>
+                  </div>
 
-              {instrument === "violin" && (
-                <span className="selected-label">Selected</span>
-              )}
-            </button>
-
-            {/* Trumpet */}
-            <button
-              className={`instrument-card ${
-                instrument === "trumpet" ? "selected" : ""
-              }`}
-              onClick={() => changeInstrument("trumpet")}
-            >
-              <span className="instrument-card-icon">🎺</span>
-
-              <div>
-                <h3>Trumpet</h3>
-                <p>Level 1 • {trumpetProgress}%</p>
-              </div>
-
-              {instrument === "trumpet" && (
-                <span className="selected-label">Selected</span>
-              )}
-            </button>
-
+                  {instrument === item.id && (
+                    <span className="selected-label">
+                      Selected
+                    </span>
+                  )}
+                </button>
+              );
+            })}
           </div>
         </section>
-
       </main>
 
       <Navbar />
