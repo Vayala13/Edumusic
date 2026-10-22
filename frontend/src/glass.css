@@ -9,7 +9,7 @@
  * like `.lesson-card.current`; those states are restyled as tinted glass at
  * the bottom of this file so they stay visible.
  */
-
+ 
 :root {
   /* Clear glass: bright at the top-left where light hits, thinner below. */
   --glass-fill:
@@ -34,7 +34,7 @@
       rgba(255, 255, 255, 0.85) 100%);
   --glass-radius: 24px;
 }
-
+ 
 /* Glass needs something colorful behind it to blur and bend. */
 .app,
 .auth-page {
@@ -46,7 +46,49 @@
     #f7f8fc;
   background-attachment: fixed;
 }
-
+ 
+/*
+ * Theme backdrops, set by ThemeContext as data-theme="red" | "green" | "black"
+ * on <html>. Same four-blob layout as the default above, recolored per
+ * theme, so the glass panels still have something colorful to blur. The
+ * glass panels themselves (--glass-fill etc.) stay the bright, light
+ * material defined above in every theme: every page's card text color is
+ * hardcoded dark (not themed), so keeping cards light is what keeps that
+ * text readable, including in the black theme.
+ */
+:root[data-theme="red"] .app,
+:root[data-theme="red"] .auth-page {
+  background:
+    radial-gradient(36rem 36rem at 6% -4%, rgba(255, 90, 90, 0.55), transparent 62%),
+    radial-gradient(32rem 32rem at 98% 14%, rgba(255, 140, 60, 0.45), transparent 62%),
+    radial-gradient(30rem 30rem at 70% 70%, rgba(220, 40, 90, 0.3), transparent 62%),
+    radial-gradient(40rem 40rem at 30% 108%, rgba(240, 100, 70, 0.4), transparent 62%),
+    #fdf4f3;
+  background-attachment: fixed;
+}
+ 
+:root[data-theme="green"] .app,
+:root[data-theme="green"] .auth-page {
+  background:
+    radial-gradient(36rem 36rem at 6% -4%, rgba(90, 210, 130, 0.5), transparent 62%),
+    radial-gradient(32rem 32rem at 98% 14%, rgba(60, 190, 160, 0.45), transparent 62%),
+    radial-gradient(30rem 30rem at 70% 70%, rgba(160, 220, 80, 0.3), transparent 62%),
+    radial-gradient(40rem 40rem at 30% 108%, rgba(40, 170, 110, 0.42), transparent 62%),
+    #f3faf5;
+  background-attachment: fixed;
+}
+ 
+:root[data-theme="black"] .app,
+:root[data-theme="black"] .auth-page {
+  background:
+    radial-gradient(36rem 36rem at 6% -4%, rgba(255, 170, 60, 0.18), transparent 62%),
+    radial-gradient(32rem 32rem at 98% 14%, rgba(80, 150, 255, 0.16), transparent 62%),
+    radial-gradient(30rem 30rem at 70% 70%, rgba(236, 110, 200, 0.1), transparent 62%),
+    radial-gradient(40rem 40rem at 30% 108%, rgba(40, 205, 150, 0.14), transparent 62%),
+    #0b0b0d;
+  background-attachment: fixed;
+}
+ 
 /* Panels: the large cards and sections on every page. */
 .app .lesson-modes,
 .app .lesson-section,
@@ -76,7 +118,7 @@
 .auth-page .auth-card {
   border-radius: var(--glass-radius);
 }
-
+ 
 /* Panels and controls share the glass material. */
 .app .lesson-modes,
 .app .lesson-section,
@@ -118,7 +160,7 @@
   box-shadow: var(--glass-shadow);
   transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
 }
-
+ 
 /* The rim is drawn as a masked gradient ring so it can fade around the edge,
    which a plain border cannot do. It covers only the 1.5px edge, so it never
    sits over the card's content. */
@@ -165,7 +207,7 @@
   mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
   pointer-events: none;
 }
-
+ 
 /* Interactive glass lifts toward you on hover and presses in on click. */
 .app .action-button:hover,
 .app .next-note-button:hover,
@@ -182,7 +224,7 @@
     inset 0 1px 1px rgba(255, 255, 255, 1),
     inset 0 -10px 24px rgba(255, 255, 255, 0.22);
 }
-
+ 
 .app .action-button:active,
 .app .next-note-button:active,
 .app .preset:active,
@@ -191,7 +233,7 @@
 .app .instrument-card:active {
   transform: scale(0.98);
 }
-
+ 
 .auth-page .auth-field input {
   background: var(--glass-fill-strong);
   -webkit-backdrop-filter: blur(12px);
@@ -199,7 +241,7 @@
   border: 1px solid rgba(255, 255, 255, 0.85);
   box-shadow: inset 0 1px 2px rgba(31, 41, 90, 0.08);
 }
-
+ 
 /* Top bar: a frosted strip the page scrolls under. */
 .app .top-bar {
   position: sticky;
@@ -211,7 +253,7 @@
   border-bottom: 1px solid rgba(255, 255, 255, 0.7);
   box-shadow: 0 1px 0 rgba(31, 41, 90, 0.05);
 }
-
+ 
 /* Bottom nav: a floating glass pill, like the iOS tab bar. */
 .app .bottom-nav {
   left: 50%;
@@ -233,13 +275,13 @@
     inset 0 1px 1px rgba(255, 255, 255, 1),
     inset 0 -8px 18px rgba(255, 255, 255, 0.2);
 }
-
+ 
 .app .bottom-nav a {
   width: 76px;
   border-radius: 28px;
   transition: background 0.2s ease, box-shadow 0.2s ease;
 }
-
+ 
 /* The selected tab is a brighter glass bubble inside the pill. */
 .app .bottom-nav a.active {
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.7));
@@ -247,23 +289,23 @@
     0 4px 14px rgba(31, 41, 90, 0.12),
     inset 0 1px 1px rgba(255, 255, 255, 1);
 }
-
+ 
 /* Selected / current states, restyled as tinted glass so they still stand
-   out. Colors match the page stylesheets (blue #315eaa, amber #f6b44b). */
+   out. Colors match the page stylesheets (blue #315eaa, amber var(--accent)). */
 .app .difficulty-tab.active {
   background: linear-gradient(145deg, rgba(70, 120, 210, 0.92), rgba(49, 94, 170, 0.85));
   color: #ffffff;
 }
-
+ 
 .app .lesson-card.current {
   background: linear-gradient(145deg, rgba(120, 165, 240, 0.55), rgba(49, 94, 170, 0.28));
 }
-
+ 
 .app .preset.active,
 .app .instrument-card.selected {
-  background: linear-gradient(145deg, rgba(255, 205, 120, 0.6), rgba(246, 180, 75, 0.25));
+  background: linear-gradient(145deg, rgba(var(--accent-light-rgb), 0.6), rgba(var(--accent-rgb), 0.25));
 }
-
+ 
 /* Respect a system request for less transparency: fall back to solid cards. */
 @media (prefers-reduced-transparency: reduce) {
   :root {
@@ -271,3 +313,4 @@
     --glass-fill-strong: #ffffff;
   }
 }
+ 

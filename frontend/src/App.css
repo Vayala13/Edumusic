@@ -2,26 +2,74 @@
   box-sizing: border-box;
 }
 
+ 
+/*
+ * --accent / --accent-dark / --accent-rgb / --accent-light-rgb are the same
+ * amber used across every page's buttons, highlights and badges (search
+ * "accent" in any page .css). Overriding them here recolors the whole app,
+ * not just the nav.
+ */
+:root {
+  --page-bg: #ffffff;
+  --chrome-bg: rgba(255, 255, 255, 0.9);
+  --chrome-bg-strong: rgba(255, 255, 255, 0.95);
+  --chrome-text: #000000;
+  --chrome-hover: rgba(0, 0, 0, 0.04);
+ 
+  --accent: #f6b44b;
+  --accent-dark: #b45309;
+  --accent-rgb: 246, 180, 75;
+  --accent-light-rgb: 255, 205, 120;
+}
+ 
+:root[data-theme="red"] {
+  --accent: #ef4444;
+  --accent-dark: #b91c1c;
+  --accent-rgb: 239, 68, 68;
+  --accent-light-rgb: 252, 165, 165;
+}
+ 
+:root[data-theme="green"] {
+  --accent: #22c55e;
+  --accent-dark: #15803d;
+  --accent-rgb: 34, 197, 94;
+  --accent-light-rgb: 134, 239, 172;
+}
+ 
+:root[data-theme="black"] {
+  --page-bg: #0b0b0d;
+  --chrome-bg: rgba(10, 10, 12, 0.85);
+  --chrome-bg-strong: rgba(10, 10, 12, 0.9);
+  --chrome-text: #f4f4f5;
+  --chrome-hover: rgba(255, 255, 255, 0.08);
+ 
+  --accent: #e5e7eb;
+  --accent-dark: #d4d4d8;
+  --accent-rgb: 229, 231, 235;
+  --accent-light-rgb: 255, 255, 255;
+}
+ 
 body {
   margin: 0;
   font-family: Arial, Helvetica, sans-serif;
-  background: #ffffff;
-  color: #000000;
+  background: var(--page-bg);
+  color: var(--chrome-text);
 }
-
+ 
 button {
   font-family: inherit;
 }
-
+ 
 .app {
   min-height: 100vh;
-  background:
-    #ffffff;
+  /* glass.css overrides this with the colorful backdrop; this is the
+     plain fallback for when glass.css isn't loaded. */
+  background: var(--page-bg);
   padding-bottom: 90px;
 }
-
+ 
 /* Top nav */
-
+ 
 .top-bar {
   height: 90px;
   display: flex;
@@ -29,17 +77,18 @@ button {
   justify-content: space-between;
   padding: 0 52px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.064);
-  background: rgba(255, 255, 255, 0.9);
+  background: var(--chrome-bg);
   backdrop-filter: blur(10px);
 }
-
+ 
 .logo {
   flex-shrink: 0;
   font-size: 31px;
   font-weight: 700;
   letter-spacing: 0.5px;
+  color: var(--chrome-text);
 }
-
+ 
 .profile {
   display: flex;
   align-items: center;
@@ -47,14 +96,14 @@ button {
   font-size: 18px;
   white-space: nowrap;
 }
-
+ 
 @media (max-width: 1100px) {
   .profile {
     gap: 18px;
     font-size: 15px;
   }
 }
-
+ 
 .profile-link {
   display: inline-flex;
   align-items: center;
@@ -66,62 +115,61 @@ button {
   text-decoration: none;
   transition: background 0.2s ease;
 }
-
+ 
 .profile-link:hover {
   background: rgba(0, 0, 0, 0.06);
 }
-
+ 
 /* Bottom nav */
-
+ 
 .bottom-nav {
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
-
+ 
   height: 72px;
   display: flex;
   justify-content: center;
   gap: 10px;
-
-  background: rgba(255, 255, 255, 0.95);
+ 
+  background: var(--chrome-bg-strong);
   backdrop-filter: blur(16px);
   border-top: 1px solid rgba(0, 0, 0, 0.064);
-
+ 
   z-index: 100;
 }
-
+ 
 .bottom-nav a {
   width: 90px;
   height: 64px;
-
+ 
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 4px;
-
-  color: #000000;
+ 
+  color: var(--chrome-text);
   text-decoration: none;
-
+ 
   border-radius: 12px;
   font-size: 20px;
-
+ 
   transition: 0.2s ease;
 }
-
+ 
 .bottom-nav a span {
   font-size: 12px;
   font-weight: 500;
 }
-
+ 
 .bottom-nav a:hover {
-  color: #000000;
-  background: rgba(0, 0, 0, 0.04);
+  color: var(--chrome-text);
+  background: var(--chrome-hover);
 }
-
+ 
 .bottom-nav a.active {
-  color: #b45309;
-  background: rgba(246, 180, 75, 0.10);
+  color: var(--accent-dark);
+  background: rgba(var(--accent-rgb), 0.10);
 }
-

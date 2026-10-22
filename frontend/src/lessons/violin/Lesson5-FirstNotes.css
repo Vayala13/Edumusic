@@ -78,7 +78,7 @@
   background:
     radial-gradient(
       circle at center,
-      rgba(246, 180, 75, 0.22),
+      rgba(var(--accent-rgb), 0.22),
       transparent 60%
     ),
     linear-gradient(145deg, #fff4e0, #f3f4f6);
@@ -129,7 +129,7 @@
 }
 
 .note-card strong {
-  color: #b45309;
+  color: var(--accent-dark);
   font-size: 34px;
 }
 
@@ -148,7 +148,7 @@
   padding: 11px 20px;
   border: none;
   border-radius: 10px;
-  background: #f6b44b;
+  background: var(--accent);
   color: #17120a;
   font-family: inherit;
   font-weight: 700;
@@ -188,7 +188,7 @@
 
 .practice-note {
   margin: 25px 0;
-  color: #b45309;
+  color: var(--accent-dark);
   font-size: 80px;
   font-weight: 700;
 }
@@ -209,7 +209,7 @@
   justify-content: center;
   gap: 12px;
   margin: 30px 0;
-  color: #b45309;
+  color: var(--accent-dark);
   font-size: 28px;
   font-weight: 700;
 }
@@ -237,8 +237,8 @@
   padding: 20px 22px;
 
   border-radius: 16px;
-  background: rgba(246, 180, 75, 0.08);
-  border: 1px solid rgba(246, 180, 75, 0.2);
+  background: rgba(var(--accent-rgb), 0.08);
+  border: 1px solid rgba(var(--accent-rgb), 0.2);
 }
 
 .lesson-completion p {
@@ -250,7 +250,7 @@
   padding: 11px 18px;
   border: none;
   border-radius: 10px;
-  background: #f6b44b;
+  background: var(--accent);
   color: #17120a;
   font-family: inherit;
   font-weight: 700;
