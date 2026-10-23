@@ -27,7 +27,7 @@ function shuffle(list) {
 
 const LETTER_INDEX = { C: 0, D: 1, E: 2, F: 3, G: 4, A: 5, B: 6 };
 
-function StaffNote({ note, instrument, status = "neutral", playedNote = null }) {
+function StaffNote({ note, status = "neutral", playedNote = null }) {
   // Violin targets include octaves (for example G3).
   const match = /^([A-G])([#b]?)(-?\d+)?$/.exec(note);
   const letter = match?.[1] || "C";
