@@ -27,8 +27,8 @@ function shuffle(list) {
 
 const LETTER_INDEX = { C: 0, D: 1, E: 2, F: 3, G: 4, A: 5, B: 6 };
 
-function StaffNote({ note }) {
-
+function StaffNote({ note, status = "neutral", playedNote = null }) {
+  // Violin targets include octaves (for example G3).
   const match = /^([A-G])([#b]?)(-?\d+)?$/.exec(note);
   const letter = match?.[1] || "C";
   const accidental = match?.[2] || "";
@@ -36,10 +36,16 @@ function StaffNote({ note }) {
   const diatonicPosition =
     octave * 7 + LETTER_INDEX[letter] - (4 * 7 + LETTER_INDEX.E);
 
-  // Each diatonic step is one staff space (9 SVG units).
+  // The bottom line is E4. Each diatonic step is one staff space (9 SVG units).
   const noteY = 120 - diatonicPosition * 9;
+  const playedMatch = playedNote ? /^([A-G])([#b]?)(-?\d+)?$/.exec(playedNote) : null;
+  const playedLetter = playedMatch?.[1] || "C";
+  const playedAccidental = playedMatch?.[2] || "";
+  const playedOctave = playedMatch?.[3] ? Number(playedMatch[3]) : 4;
+  const playedPosition = playedOctave * 7 + LETTER_INDEX[playedLetter] - (4 * 7 + LETTER_INDEX.E);
+  const playedY = 120 - playedPosition * 9;
   const staffLines = [48, 66, 84, 102, 120];
-
+  // Ledger lines must remain visible between the staff and the note.
   const ledgerLines = [];
   if (diatonicPosition < -1) {
     for (let step = -2; step >= diatonicPosition; step -= 2) {
@@ -99,7 +105,7 @@ function StaffNote({ note }) {
           x2={noteY >= 84 ? 206 : 190}
           y2={noteY >= 84 ? noteY - 36 : noteY + 36}
           className="note-stem"
-          stroke="currentColor"
+          stroke={status === "correct" ? "#198754" : "currentColor"}
           strokeWidth="2.5"
           strokeLinecap="round"
         />
@@ -110,7 +116,30 @@ function StaffNote({ note }) {
           ry="6.5"
           transform={`rotate(-20 198 ${noteY})`}
           className="note-head"
+          style={{
+            fill: status === "correct" ? "#198754" : "#252525",
+            stroke: status === "correct" ? "#198754" : "#252525",
+          }}
         />
+        {status === "incorrect" && playedNote && (
+          <g aria-label={`Played ${playedNote}, incorrect`}>
+            {playedAccidental && (
+              <text x="217" y={playedY + 6} fill="#dc3545" fontSize="23">
+                {playedAccidental === "b" ? "♭" : "♯"}
+              </text>
+            )}
+            <line
+              x1={playedY >= 84 ? 266 : 250}
+              y1={playedY}
+              x2={playedY >= 84 ? 266 : 250}
+              y2={playedY >= 84 ? playedY - 36 : playedY + 36}
+              stroke="#dc3545" strokeWidth="2.5" strokeLinecap="round"
+            />
+            <ellipse cx="258" cy={playedY} rx="9" ry="6.5"
+              transform={`rotate(-20 258 ${playedY})`}
+              fill="#dc3545" stroke="#dc3545" />
+          </g>
+        )}
       </svg>
 
       <div className="staff-note-name">{letter}{accidental}</div>
@@ -133,7 +162,7 @@ function Practice() {
   const [randomOrder, setRandomOrder] = useState([]);
   const [finished, setFinished] = useState(false);
 
-  // The open connection to the pitch detector, if any.
+  // The open connection to the pitch detector.
   const socketRef = useRef(null);
 
   const notes = instrument === "violin" ? VIOLIN_NOTES : TRUMPET_NOTES;
@@ -360,7 +389,7 @@ function Practice() {
             <>
               <div className="target-note">
                 <p className="target-note-label">PLAY THIS NOTE</p>
-                <StaffNote note={targetNote} instrument={instrument} />
+                <StaffNote note={targetNote} instrument={instrument} status={practiceStatus} playedNote={practiceStatus === "incorrect" ? detectedNote : null} />
                 <p className="target-note-description">
                   Play the note shown on the staff.
                 </p>
