@@ -7,17 +7,20 @@ import { InstrumentProvider } from "./context/InstrumentContext";
 import { ProgressProvider } from "./context/ProgressContext";
 import { AuthProvider } from "./context/AuthContext";
 import { PracticeStatsProvider } from "./context/PracticeStatsContext.jsx";
+import { ThemeProvider } from "./context/ThemeContext.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <AuthProvider>
-      <InstrumentProvider>
-        <ProgressProvider>
-          <PracticeStatsProvider>
-            <App />
-          </PracticeStatsProvider>
-        </ProgressProvider>
-      </InstrumentProvider>
-    </AuthProvider>
+    <ThemeProvider>
+      <AuthProvider>
+        <InstrumentProvider>
+          <ProgressProvider>
+            <PracticeStatsProvider>
+              <App />
+            </PracticeStatsProvider>
+          </ProgressProvider>
+        </InstrumentProvider>
+      </AuthProvider>
+    </ThemeProvider>
   </React.StrictMode>
 );
