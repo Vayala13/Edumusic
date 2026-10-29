@@ -16,8 +16,6 @@ function Home() {
     dayStreak,
   } = usePracticeStats();
 
-  const isViolin = instrument === "violin";
-
   const xp = stats?.xp ?? 0;
   const level = Math.floor(xp / 100) + 1;
 
