@@ -21,11 +21,18 @@ const THEME_OPTIONS = [
   { value: "black", label: "Black", preview: "#0b0b0d" },
 ];
 
+const instrumentDetails = {
+  violin: { name: "Violin", icon: "🎻" },
+  trumpet: { name: "Trumpet", icon: "🎺" },
+  guitar: { name: "Guitar", icon: "🎸" },
+  ukulele: { name: "Ukulele", icon: "🪕" },
+};
+
 function Profile() {
   const navigate = useNavigate();
   const { logout, user } = useAuth();
   const { instrument } = useInstrument();
-  const { progress } = useProgress();
+  const { progress, loading: loadingProgress } = useProgress();
   const { theme, setTheme } = useTheme();
 
   const {
@@ -34,6 +41,18 @@ function Profile() {
     allNotesLearned,
     dayStreak,
   } = usePracticeStats();
+
+  const hasLearnedNote = allNotesLearned > 0;
+  const hasExploredNotes = allNotesLearned >= 5;
+
+  const hasCompletedLesson =
+    (progress?.violin?.length ?? 0) > 0 ||
+    (progress?.trumpet?.length ?? 0) > 0;
+
+  const practiceDayCount = new Set(stats.practiceDates || []).size;
+  const hasPracticed = practiceDayCount >= 1;
+  const hasPracticedThreeDays = practiceDayCount >= 3;
+
 
   const [username, setUsername] = useState("");
   const [editingUsername, setEditingUsername] = useState(false);
@@ -109,12 +128,7 @@ function Profile() {
     navigate("/login");
   }
 
-  const instrumentDetails = {
-    violin: { name: "Violin", icon: "🎻" },
-    trumpet: { name: "Trumpet", icon: "🎺" },
-    guitar: { name: "Guitar", icon: "🎸" },
-    ukulele: { name: "Ukulele", icon: "🪕" },
-  };
+  const currentLessons = lessons[instrument] || [];
 
   const currentInstrument =
     instrumentDetails[instrument] || instrumentDetails.violin;
@@ -122,9 +136,9 @@ function Profile() {
   const instrumentName = currentInstrument.name;
   const instrumentIcon = currentInstrument.icon;
 
-  const currentLessons = lessons[instrument] || [];
+  const completedLessons =
+    progress?.[instrument]?.length || 0;
 
-  const completedLessons = progress[instrument]?.length || 0;
   const totalLessons = currentLessons.length;
 
   const progressPercentage =
@@ -260,27 +274,94 @@ function Profile() {
           </div>
 
           <div className="achievements-grid">
-            <div className="achievement-card">
+
+            <div
+              className={`achievement-card ${loadingStats ? "" : hasLearnedNote ? "earned" : "locked"
+                }`}
+            >
               <div className="achievement-icon">🎵</div>
               <div>
                 <h3>First Note</h3>
                 <p>Play your first note.</p>
+                <span className="achievement-status">
+                  {loadingStats
+                    ? "Checking..."
+                    : hasLearnedNote
+                      ? "✓ Earned"
+                      : "🔒 Locked"}
+                </span>
               </div>
             </div>
 
-            <div className="achievement-card">
+            <div
+              className={`achievement-card ${loadingProgress ? "" : hasCompletedLesson ? "earned" : "locked"
+                }`}
+            >
               <div className="achievement-icon">📚</div>
               <div>
                 <h3>First Lesson</h3>
                 <p>Complete your first lesson.</p>
+                <span className="achievement-status">
+                  {loadingProgress
+                    ? "Checking..."
+                    : hasCompletedLesson
+                      ? "✓ Earned"
+                      : "🔒 Locked"}
+                </span>
               </div>
             </div>
 
-            <div className="achievement-card">
+            <div
+              className={`achievement-card ${loadingStats ? "" : hasPracticed ? "earned" : "locked"
+                }`}
+            >
               <div className="achievement-icon">🔥</div>
               <div>
                 <h3>Practice Starter</h3>
-                <p>Complete your first practice session.</p>
+                <p>Practice and successfully play your first note.</p>
+                <span className="achievement-status">
+                  {loadingStats
+                    ? "Checking..."
+                    : hasPracticed
+                      ? "✓ Earned"
+                      : "🔒 Locked"}
+                </span>
+              </div>
+            </div>
+
+            <div
+              className={`achievement-card ${loadingStats ? "" : hasExploredNotes ? "earned" : "locked"
+                }`}
+            >
+              <div className="achievement-icon">🎼</div>
+              <div>
+                <h3>Note Explorer</h3>
+                <p>Learn five unique notes.</p>
+                <span className="achievement-status">
+                  {loadingStats
+                    ? "Checking..."
+                    : hasExploredNotes
+                      ? "✓ Earned"
+                      : "🔒 Locked"}
+                </span>
+              </div>
+            </div>
+
+            <div
+              className={`achievement-card ${loadingStats ? "" : hasPracticedThreeDays ? "earned" : "locked"
+                }`}
+            >
+              <div className="achievement-icon">🌟</div>
+              <div>
+                <h3>Consistent Musician</h3>
+                <p>Practice on three different days.</p>
+                <span className="achievement-status">
+                  {loadingStats
+                    ? "Checking..."
+                    : hasPracticedThreeDays
+                      ? "✓ Earned"
+                      : "🔒 Locked"}
+                </span>
               </div>
             </div>
           </div>

@@ -184,8 +184,19 @@
 .achievement-card {
     padding: 18px;
     border-radius: 16px;
-    background: rgba(0, 0, 0, 0.04);
-    border: 1px solid rgba(0, 0, 0, 0.064);
+    background: var(--page-bg);
+    border: 1px solid var(--accent);
+    transition: opacity 0.2s ease, border-color 0.2s ease;
+}
+
+.achievement-card.earned {
+    border: 1px solid var(--accent);
+    background: color-mix(in srgb, var(--accent) 10%, var(--page-bg));
+}
+
+.achievement-card.locked {
+    opacity: 0.65;
+    border-color: rgba(128, 128, 128, 0.25);
 }
 
 .achievement-icon {
@@ -200,10 +211,24 @@
 
 .achievement-card p {
     margin: 0;
-    color: var(--chrome-text);
-    ;
+    color: inherit;
     font-size: 12px;
     line-height: 1.4;
+}
+
+.achievement-status {
+    display: inline-block;
+    margin-top: 10px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.achievement-card.earned .achievement-status {
+    color: var(--accent);
+}
+
+.achievement-card.locked .achievement-status {
+    color: inherit;
 }
 
 .logout-section {

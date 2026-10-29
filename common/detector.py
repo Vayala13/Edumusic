@@ -10,8 +10,6 @@ benefit every instrument.
 import sys
 import queue
 
-import sounddevice as sd
-
 from common.metronome import Metronome, DEFAULT_BPM
 from common.pitch_utils import PitchTracker, freq_to_note
 
@@ -87,7 +85,9 @@ def run(instrument, fmin, fmax, bpm=DEFAULT_BPM):
     print(f"Play your {instrument} into the microphone. Press Ctrl+C to stop.\n")
 
     metronome.start()
-
+    
+    import sounddevice as sd
+    
     try:
         with sd.InputStream(channels=1,
                              samplerate=SAMPLE_RATE,

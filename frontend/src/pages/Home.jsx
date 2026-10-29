@@ -89,9 +89,16 @@ function Home() {
             </>
           ) : (
             <div>
-              <p className="eyebrow">COMING SOON</p>
+
+              <p className="eyebrow">LESSONS</p>
               <h2>No lessons available yet</h2>
-              <p>Beginner lessons for this instrument will be added soon.</p>
+              <p>
+                  Beginner lessons for this instrument will be added soon.
+                  Try selecting Violin or Trumpet.
+              </p>
+              <Link to="/closet" className="continue-button">
+                Choose instrument
+              </Link>
             </div>
           )}
         </section>
