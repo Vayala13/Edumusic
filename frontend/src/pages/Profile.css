@@ -15,7 +15,8 @@
 
 .profile-intro>p:last-child {
     margin: 0;
-    color: #000000;
+    color: var(--chrome-text);
+    ;
     font-size: 15px;
 }
 
@@ -49,7 +50,8 @@
 
 .profile-info p {
     margin: 0;
-    color: #000000;
+    color: var(--chrome-text);
+    ;
     font-size: 14px;
 }
 
@@ -81,7 +83,8 @@
 
 .stat-card p {
     margin: 0;
-    color: #000000;
+    color: var(--chrome-text);
+    ;
     font-size: 12px;
 }
 
@@ -100,7 +103,8 @@
 
 .section-title p {
     margin: 0;
-    color: #000000;
+    color: var(--chrome-text);
+    ;
     font-size: 13px;
 }
 
@@ -144,7 +148,8 @@
 
 .instrument-progress-header p {
     margin: 0;
-    color: #000000;
+    color: var(--chrome-text);
+    ;
     font-size: 12px;
 }
 
@@ -259,12 +264,7 @@
     gap: 15px;
 }
 
-/*
- * Uses the --chrome-* vars (defined in App.css, themed per data-theme),
- * not the plain black/white alpha other cards on this page use — this
- * button has to stay visible and readable in every theme, including the
- * black one, since it's the control that switches between them.
- */
+
 .theme-swatch {
     display: flex;
     flex-direction: column;
@@ -320,5 +320,71 @@
 
     .theme-swatches {
         grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.profile-card {
+    background: var(--chrome-hover);
+    border: 1px solid rgba(var(--accent-rgb), 0.3);
+    border-radius: 20px;
+}
+
+.profile-avatar {
+    background: rgba(var(--accent-rgb), 0.12);
+    border: 1px solid rgba(var(--accent-rgb), 0.3);
+}
+
+.profile-info h2 {
+    font-size: 25px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    overflow-wrap: anywhere;
+}
+
+.profile-info button {
+    padding: 9px 15px;
+    border: 1px solid rgba(var(--accent-rgb), 0.5);
+    border-radius: 10px;
+    background: rgba(var(--accent-rgb), 0.15);
+    color: var(--chrome-text);
+    font-family: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.profile-info button:hover {
+    background: rgba(var(--accent-rgb), 0.25);
+}
+
+.profile-info input {
+    padding: 10px 12px;
+    border: 1px solid rgba(var(--accent-rgb), 0.4);
+    border-radius: 10px;
+    background: var(--chrome-hover);
+    color: var(--chrome-text);
+    font: inherit;
+}
+
+.profile-info input:focus {
+    outline: 2px solid rgba(var(--accent-rgb), 0.5);
+    border-color: var(--accent-dark);
+}
+
+@media (max-width: 480px) {
+    .profile-card {
+        align-items: flex-start;
+        gap: 14px;
+        padding: 16px;
+    }
+
+    .profile-avatar {
+        width: 52px;
+        height: 52px;
+        font-size: 28px;
+    }
+
+    .profile-info h2 {
+        font-size: 21px;
     }
 }

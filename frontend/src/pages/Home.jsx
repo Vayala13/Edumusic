@@ -21,8 +21,16 @@ function Home() {
   const xp = stats?.xp ?? 0;
   const level = Math.floor(xp / 100) + 1;
 
-  const instrumentName = isViolin ? "Violin" : "Trumpet";
-  const instrumentIcon = isViolin ? "🎻" : "🎺";
+  const instrumentDetails = {
+    violin: { name: "Violin", icon: "🎻" },
+    trumpet: { name: "Trumpet", icon: "🎺" },
+    guitar: { name: "Guitar", icon: "🎸" },
+    ukulele: { name: "Ukulele", icon: "🪕" },
+  };
+
+  const currentInstrument = instrumentDetails[instrument] || instrumentDetails.violin;
+  const instrumentName = currentInstrument.name;
+  const instrumentIcon = currentInstrument.icon;
 
   const currentLessons = lessons[instrument] || [];
 
@@ -77,20 +85,18 @@ function Home() {
                 </p>
               </div>
 
-              <Link
-                to={currentLesson.link}
-                className="continue-button"
-              >
+              <Link to={currentLesson.link} className="continue-button">
                 →
               </Link>
             </>
           ) : (
             <div>
+
               <p className="eyebrow">LESSONS</p>
               <h2>No lessons available yet</h2>
               <p>
-                Lessons for this instrument are not available yet.
-                Try selecting Violin or Trumpet.
+                  Beginner lessons for this instrument will be added soon.
+                  Try selecting Violin or Trumpet.
               </p>
               <Link to="/closet" className="continue-button">
                 Choose instrument

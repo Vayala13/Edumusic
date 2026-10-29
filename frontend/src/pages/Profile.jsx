@@ -21,6 +21,13 @@ const THEME_OPTIONS = [
   { value: "black", label: "Black", preview: "#0b0b0d" },
 ];
 
+const instrumentDetails = {
+  violin: { name: "Violin", icon: "🎻" },
+  trumpet: { name: "Trumpet", icon: "🎺" },
+  guitar: { name: "Guitar", icon: "🎸" },
+  ukulele: { name: "Ukulele", icon: "🪕" },
+};
+
 function Profile() {
   const navigate = useNavigate();
   const { logout, user } = useAuth();
@@ -123,24 +130,22 @@ function Profile() {
 
   const currentLessons = lessons[instrument] || [];
 
-  const instrumentName =
-    instrument === "violin"
-      ? "Violin"
-      : "Trumpet";
+  const currentInstrument =
+    instrumentDetails[instrument] || instrumentDetails.violin;
 
-  const instrumentIcon =
-    instrument === "violin"
-      ? "🎻"
-      : "🎺";
+  const instrumentName = currentInstrument.name;
+  const instrumentIcon = currentInstrument.icon;
 
   const completedLessons =
     progress?.[instrument]?.length || 0;
 
   const totalLessons = currentLessons.length;
 
-  const progressPercentage = Math.round(
-    (completedLessons / totalLessons) * 100
-  );
+  const progressPercentage =
+    totalLessons > 0
+      ? Math.round((completedLessons / totalLessons) * 100)
+      : 0;
+
 
   return (
     <div className="app">
@@ -254,7 +259,9 @@ function Profile() {
                 ></div>
               </div>
               <p className="profile-lesson-count">
-                {completedLessons} of {totalLessons} lessons completed
+                {totalLessons === 0
+                  ? `Lessons for ${instrumentName} coming soon.`
+                  : `${completedLessons} of ${totalLessons} lessons completed`}
               </p>
             </div>
           </div>
