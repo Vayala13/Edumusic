@@ -9,7 +9,7 @@ function Lessons() {
   const { instrument } = useInstrument();
   const { isLessonCompleted } = useProgress();
 
-  const currentLessons = lessons[instrument];
+  const currentLessons = lessons[instrument] || [];
 
   const instrumentName =
     instrument === "violin" ? "Violin" : "Trumpet";
@@ -55,9 +55,12 @@ function Lessons() {
     (lesson) => lesson.status === "completed"
   ).length;
 
-  const progress = Math.round(
-    (completedLessons / currentLessons.length) * 100
-  );
+  const progress =
+    currentLessons.length > 0
+      ? Math.round(
+        (completedLessons / currentLessons.length) * 100
+      )
+      : 0;
 
   return (
     <div className="app">

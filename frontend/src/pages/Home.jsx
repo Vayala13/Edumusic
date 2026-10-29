@@ -14,7 +14,7 @@ function Home() {
     stats,
     loadingStats,
     dayStreak,
-} = usePracticeStats();
+  } = usePracticeStats();
 
   const isViolin = instrument === "violin";
 
@@ -24,14 +24,14 @@ function Home() {
   const instrumentName = isViolin ? "Violin" : "Trumpet";
   const instrumentIcon = isViolin ? "🎻" : "🎺";
 
-  const currentLessons = lessons[instrument];
+  const currentLessons = lessons[instrument] || [];
 
   // Finds the first lesson that has not been completed
   const currentLesson =
     currentLessons.find(
       (lesson) =>
         !isLessonCompleted(instrument, lesson.number)
-    ) || currentLessons[currentLessons.length - 1];
+    ) || currentLessons[currentLessons.length - 1] || null;
 
   return (
     <div className="app">
@@ -67,31 +67,36 @@ function Home() {
         </section>
 
         <section className="continue-card">
+          {currentLesson ? (
+            <>
+              <div>
+                <p className="eyebrow">CONTINUE LESSON</p>
+                <h2>{currentLesson.title}</h2>
+                <p>
+                  Lesson {currentLesson.number} • {currentLesson.description}
+                </p>
+              </div>
 
-          <div>
-
-            <p className="eyebrow">
-              CONTINUE LESSON
-            </p>
-
-            <h2>
-              {currentLesson.title}
-            </h2>
-
-            <p>
-              Lesson {currentLesson.number} •{" "}
-              {currentLesson.description}
-            </p>
-
-          </div>
-
-          <Link
-            to={currentLesson.link}
-            className="continue-button"
-          >
-            →
-          </Link>
-
+              <Link
+                to={currentLesson.link}
+                className="continue-button"
+              >
+                →
+              </Link>
+            </>
+          ) : (
+            <div>
+              <p className="eyebrow">LESSONS</p>
+              <h2>No lessons available yet</h2>
+              <p>
+                Lessons for this instrument are not available yet.
+                Try selecting Violin or Trumpet.
+              </p>
+              <Link to="/closet" className="continue-button">
+                Choose instrument
+              </Link>
+            </div>
+          )}
         </section>
 
         <section className="quick-actions">
