@@ -14,24 +14,30 @@ function Home() {
     stats,
     loadingStats,
     dayStreak,
-} = usePracticeStats();
-
-  const isViolin = instrument === "violin";
+  } = usePracticeStats();
 
   const xp = stats?.xp ?? 0;
   const level = Math.floor(xp / 100) + 1;
 
-  const instrumentName = isViolin ? "Violin" : "Trumpet";
-  const instrumentIcon = isViolin ? "🎻" : "🎺";
+  const instrumentDetails = {
+    violin: { name: "Violin", icon: "🎻" },
+    trumpet: { name: "Trumpet", icon: "🎺" },
+    guitar: { name: "Guitar", icon: "🎸" },
+    ukulele: { name: "Ukulele", icon: "🪕" },
+  };
 
-  const currentLessons = lessons[instrument];
+  const currentInstrument = instrumentDetails[instrument] || instrumentDetails.violin;
+  const instrumentName = currentInstrument.name;
+  const instrumentIcon = currentInstrument.icon;
+
+  const currentLessons = lessons[instrument] || [];
 
   // Finds the first lesson that has not been completed
   const currentLesson =
     currentLessons.find(
       (lesson) =>
         !isLessonCompleted(instrument, lesson.number)
-    ) || currentLessons[currentLessons.length - 1];
+    ) || currentLessons[currentLessons.length - 1] || null;
 
   return (
     <div className="app">
@@ -67,31 +73,27 @@ function Home() {
         </section>
 
         <section className="continue-card">
+          {currentLesson ? (
+            <>
+              <div>
+                <p className="eyebrow">CONTINUE LESSON</p>
+                <h2>{currentLesson.title}</h2>
+                <p>
+                  Lesson {currentLesson.number} • {currentLesson.description}
+                </p>
+              </div>
 
-          <div>
-
-            <p className="eyebrow">
-              CONTINUE LESSON
-            </p>
-
-            <h2>
-              {currentLesson.title}
-            </h2>
-
-            <p>
-              Lesson {currentLesson.number} •{" "}
-              {currentLesson.description}
-            </p>
-
-          </div>
-
-          <Link
-            to={currentLesson.link}
-            className="continue-button"
-          >
-            →
-          </Link>
-
+              <Link to={currentLesson.link} className="continue-button">
+                →
+              </Link>
+            </>
+          ) : (
+            <div>
+              <p className="eyebrow">COMING SOON</p>
+              <h2>No lessons available yet</h2>
+              <p>Beginner lessons for this instrument will be added soon.</p>
+            </div>
+          )}
         </section>
 
         <section className="quick-actions">
