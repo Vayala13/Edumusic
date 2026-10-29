@@ -165,10 +165,22 @@ function Practice() {
   // The open connection to the pitch detector.
   const socketRef = useRef(null);
 
-  const notes = instrument === "violin" ? VIOLIN_NOTES : TRUMPET_NOTES;
+  const instrumentDetails = {
+    violin: { name: "Violin", icon: "🎻", notes: VIOLIN_NOTES },
+    trumpet: { name: "Trumpet", icon: "🎺", notes: TRUMPET_NOTES },
+    guitar: { name: "Guitar", icon: "🎸", notes: [] },
+    ukulele: { name: "Ukulele", icon: "🪕", notes: [] },
+  };
 
-  const instrumentName = instrument === "violin" ? "Violin" : "Trumpet";
-  const instrumentIcon = instrument === "violin" ? "🎻" : "🎺";
+  const currentInstrument =
+    instrumentDetails[instrument] || instrumentDetails.violin;
+
+  const instrumentName = currentInstrument.name;
+  const instrumentIcon = currentInstrument.icon;
+  const notes = currentInstrument.notes;
+
+  const isPracticeAvailable =
+    instrument === "violin" || instrument === "trumpet";
 
   // The list of notes the page is stepping through right now.
   const sequence = mode === "random" ? randomOrder : notes;
@@ -302,6 +314,42 @@ function Practice() {
       setCurrentNote(0);
     }
   };
+
+  if (!isPracticeAvailable) {
+    return (
+      <div className="app">
+        <main className="practice-page">
+          <section className="practice-intro">
+            <p className="eyebrow">PRACTICE MODE</p>
+            <h1>Practice</h1>
+            <p>Practice playing notes and improve your accuracy.</p>
+          </section>
+
+          <section className="practice-card">
+            <div className="practice-instrument">
+              <span className="practice-instrument-icon">
+                {instrumentIcon}
+              </span>
+
+              <div>
+                <h2>{instrumentName}</h2>
+                <p>Beginner Practice</p>
+              </div>
+            </div>
+
+            <div className="practice-finished">
+              <h3>Practice coming soon!</h3>
+              <p>
+                Beginner practice for {instrumentName} will be added soon.
+              </p>
+            </div>
+          </section>
+        </main>
+
+        <Navbar />
+      </div>
+    );
+  }
 
   return (
     <div className="app">
