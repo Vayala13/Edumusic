@@ -4,7 +4,6 @@ import time
 import threading
 
 import numpy as np
-import sounddevice as sd
 
 DEFAULT_SAMPLE_RATE = 44100
 DEFAULT_BPM = 120
@@ -31,6 +30,7 @@ class Metronome:
         return click.astype(np.float32)
 
     def _run(self):
+        import sounddevice as sd
         interval = 60.0 / self.bpm
         click = self._click_sound()
         next_tick = time.time()
