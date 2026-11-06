@@ -7,19 +7,50 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [info, setInfo] = useState("");
+  const [resetting, setResetting] = useState(false);
 
-  const { login } = useAuth();
+  const { login, resetPassword } = useAuth();
   const navigate = useNavigate();
 
   async function handleSubmit(e) {
     e.preventDefault();
     setError("");
+    setInfo("");
 
     try {
       await login(email, password);
       navigate("/");
-    } catch {
-      setError("Incorrect email or password.");
+    } catch (err) {
+      console.error("Firebase login error:", err.code, err.message, err);
+      setError(
+        [err.code, err.message].filter(Boolean).join(" — ") ||
+          "Incorrect email or password."
+      );
+    }
+  }
+
+  async function handleReset() {
+    setError("");
+    setInfo("");
+
+    if (!email) {
+      setError("Enter your email first, then click Forgot password.");
+      return;
+    }
+
+    setResetting(true);
+    try {
+      await resetPassword(email);
+      setInfo(`Reset link sent to ${email}. Check inbox and spam.`);
+    } catch (err) {
+      console.error("Firebase reset error:", err.code, err.message, err);
+      setError(
+        [err.code, err.message].filter(Boolean).join(" — ") ||
+          "Could not send reset email."
+      );
+    } finally {
+      setResetting(false);
     }
   }
 
@@ -53,6 +84,13 @@ function Login() {
             </div>
           )}
 
+          {info && (
+            <div className="auth-info">
+              <span>✓</span>
+              <p>{info}</p>
+            </div>
+          )}
+
           <form
             className="auth-form"
             onSubmit={handleSubmit}
@@ -81,6 +119,15 @@ function Login() {
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />
+
+              <button
+                type="button"
+                className="auth-forgot"
+                onClick={handleReset}
+                disabled={resetting}
+              >
+                {resetting ? "Sending reset link…" : "Forgot password?"}
+              </button>
             </div>
 
             <button
