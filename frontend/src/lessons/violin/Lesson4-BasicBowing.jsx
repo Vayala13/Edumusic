@@ -5,9 +5,19 @@ import { useInstrument } from "../../context/useInstrument";
 import { useProgress } from "../../context/useProgress";
 import "./Lesson4-BasicBowing.css";
 
+const BOW_HOLD_STEPS = [
+  { id: "relaxed", title: "Relax your hand", detail: "Let your fingers curve naturally and keep your wrist loose." },
+  { id: "gentle", title: "Find the frog", detail: "The frog is the thicker end of the bow where your hand holds it." },
+  { id: "thumb", title: "Place your thumb", detail: "Bend your thumb gently and rest its tip near the frog, opposite the fingers. Avoid locking it straight." },
+  { id: "middle-ring", title: "Add your middle and ring fingers", detail: "Curve these fingers over the stick near the frog. Keep them soft rather than squeezing." },
+  { id: "index-pinky", title: "Position your index and little fingers", detail: "Let your index finger curve over the stick. Curve your little finger on top of the stick near the end of the frog." },
+  { id: "check", title: "Check the complete bow hold", detail: "Your fingers should be curved, your thumb bent, and your hand relaxed. Ask a teacher to check your grip if it feels uncomfortable." },
+];
+
 function BasicBowing() {
   const [mode, setMode] = useState("learn");
-
+  const [checkedSteps, setCheckedSteps] = useState([]);
+  const [strokeCount, setStrokeCount] = useState(0);
   const { instrument } = useInstrument();
   const { completeLesson } = useProgress();
   const navigate = useNavigate();
@@ -17,229 +27,124 @@ function BasicBowing() {
     navigate("/lessons");
   };
 
-  const nextMode = () => {
-    if (mode === "learn") {
-      setMode("practice");
-    } else if (mode === "practice") {
-      setMode("play");
-    }
+  const toggleStep = (id) => {
+    setCheckedSteps((previous) =>
+      previous.includes(id) ? previous.filter((step) => step !== id) : [...previous, id]
+    );
   };
 
   return (
     <div className="app">
       <header className="top-bar">
         <div className="logo">Basic Bowing</div>
-
-        <div className="profile">
-          <span>🎻</span>
-        </div>
+        <div className="profile"><span>🎻</span></div>
       </header>
 
       <main className="lesson-page">
-        <Link to="/lessons" className="back-link">
-          ← Back to Lessons
-        </Link>
+        <Link to="/lessons" className="back-link">← Back to Lessons</Link>
 
         <section className="lesson-header">
-          <p className="eyebrow">
-            LESSON 4 OF 5 • VIOLIN
-          </p>
-
+          <p className="eyebrow">LESSON 4 OF 5 • VIOLIN</p>
           <h1>Basic Bowing</h1>
-
-          <p>
-            Learn how to hold and move the bow.
-          </p>
+          <p>Learn a relaxed bow hold, practice the steps, then try a slow open-string bow stroke.</p>
         </section>
 
         <div className="lesson-modes">
-          <button
-            className={
-              mode === "learn"
-                ? "mode-button active"
-                : "mode-button"
-            }
-            onClick={() => setMode("learn")}
-          >
-            Learn
-          </button>
-
-          <button
-            className={
-              mode === "practice"
-                ? "mode-button active"
-                : "mode-button"
-            }
-            onClick={() => setMode("practice")}
-          >
-            Practice
-          </button>
-
-          <button
-            className={
-              mode === "play"
-                ? "mode-button active"
-                : "mode-button"
-            }
-            onClick={() => setMode("play")}
-          >
-            Play
-          </button>
+          <button className={mode === "learn" ? "mode-button active" : "mode-button"} onClick={() => setMode("learn")}>Learn</button>
+          <button className={mode === "practice" ? "mode-button active" : "mode-button"} onClick={() => setMode("practice")}>Practice</button>
+          <button className={mode === "play" ? "mode-button active" : "mode-button"} onClick={() => setMode("play")}>Play</button>
         </div>
 
         {mode === "learn" && (
-          <LearnSection onNext={nextMode} />
+          <>
+            <section className="lesson-content">
+              <div className="instrument-display"><span>🏹</span></div>
+              <div className="lesson-section">
+                <h2>Using the Bow</h2>
+                <p>The bow creates sound when it moves across the violin strings. Smooth, controlled movements help you produce a clear sound.</p>
+              </div>
+              <div className="lesson-section bow-hold-tutorial">
+                <h2>How to Hold the Bow</h2>
+                <p>Follow these steps in order.</p>
+                <ol className="bow-hold-steps">
+                  <li className="bow-hold-step">
+                    <div><h3> Relax your hand</h3><p>Shake out your hand, then let your fingers curve naturally. Keep your wrist loose.</p></div>
+                  </li>
+                  <li className="bow-hold-step">
+                    <div><h3> Find the frog</h3><p>Locate the thicker part at the hand end of the bow. This is called the frog.</p></div>
+                  </li>
+                  <li className="bow-hold-step">
+                    <div><h3> Place your thumb</h3><p>Bend your thumb gently and place its tip near the frog, opposite your fingers. Do not lock it straight.</p></div>
+                  </li>
+                  <li className="bow-hold-step">
+                    <div><h3> Add your middle and ring fingers</h3><p>Curve these fingers over the stick near the frog. Keep them relaxed instead of squeezing.</p></div>
+                  </li>
+                  <li className="bow-hold-step">
+                    <div><h3> Position your index and little fingers</h3><p>Curve your index finger over the stick. Let your little finger curve on top of the stick near the frog end.</p></div>
+                  </li>
+                  <li className="bow-hold-step">
+                    <div><h3> Check your complete bow hold</h3><p>Your fingers should be curved, your thumb bent, and your hand relaxed. The bow should feel secure without a tight grip.</p></div>
+                  </li>
+                </ol>
+              </div>
+              <div className="lesson-section">
+                <h2>Remember</h2>
+                <p>Avoid squeezing the bow. If your hand or thumb feels tense or uncomfortable, pause and reset your hold.</p>
+              </div>
+            </section>
+            <div className="lesson-next"><button onClick={() => setMode("practice")}>Start Practice →</button></div>
+          </>
         )}
 
         {mode === "practice" && (
-          <PracticeSection onNext={nextMode} />
+          <>
+            <section className="practice-card">
+              <p className="eyebrow">PRACTICE THE HOLD</p>
+              <h2>Check Your Bow Hold</h2>
+              <p>Take your time with each step. Check it off when you have tried it.</p>
+              <div className="practice-note" aria-hidden="true">🏹</div>
+              <div className="bow-practice-checklist" style={{ display: "flex", flexDirection: "column", gap: "12px", width: "100%" }}>
+                {BOW_HOLD_STEPS.map((step) => (
+                  <label className="bow-practice-step" key={step.id} style={{ display: "flex", alignItems: "flex-start", gap: "12px", width: "100%", boxSizing: "border-box", textAlign: "left" }}>
+                    <input type="checkbox" checked={checkedSteps.includes(step.id)} onChange={() => toggleStep(step.id)} />
+                    <span style={{ display: "flex", flexDirection: "column", gap: "4px", minWidth: 0 }}><strong>{step.title}</strong><small>{step.detail}</small></span>
+                  </label>
+                ))}
+              </div>
+              <div className="practice-tip">💡 Keep your grip comfortable and your wrist relaxed.</div>
+              <p className="open-string-progress">Steps practiced: {checkedSteps.length} of {BOW_HOLD_STEPS.length}</p>
+            </section>
+            <div className="lesson-next">
+              <button onClick={() => setMode("play")} disabled={checkedSteps.length !== BOW_HOLD_STEPS.length}>
+                Continue to Play →
+              </button>
+            </div>
+            {checkedSteps.length !== BOW_HOLD_STEPS.length && <p className="bow-continue-hint">Try all six steps to continue.</p>}
+          </>
         )}
 
         {mode === "play" && (
-          <PlaySection onComplete={handleComplete} />
+          <>
+            <section className="play-card">
+              <p className="eyebrow">PLAY AN OPEN STRING</p>
+              <h2>Try a Slow Bow Stroke</h2>
+              <p>Set your bow on the G string. Play one slow, steady stroke while keeping your hand relaxed. </p>
+              <div className="play-note">G</div>
+              <div className="play-status" role="status">{strokeCount === 0 ? "try one slow stroke." : `Strokes practiced: ${strokeCount}`}</div>
+              <div className="bow-play-actions">
+                <button className="start-practice-button" onClick={() => setStrokeCount((count) => count + 1)}>✓ I tried a slow stroke</button>
+                <button className="lesson-action-secondary" onClick={() => setStrokeCount(0)}>Reset</button>
+              </div>
+            </section>
+            <div className="lesson-completion">
+              <p>{strokeCount > 0 ? "Nice work!" : "Try at least one long, slow bow stroke before finishing."}</p>
+              <button className="complete-button" onClick={handleComplete} disabled={strokeCount === 0}>Complete Lesson →</button>
+            </div>
+          </>
         )}
       </main>
-
       <Navbar />
     </div>
-  );
-}
-
-function LearnSection({ onNext }) {
-  return (
-    <>
-      <section className="lesson-content">
-
-        <div className="instrument-display">
-          <span>🏹</span>
-        </div>
-
-        <div className="lesson-section">
-          <h2>Using the Bow</h2>
-
-          <p>
-            The bow is used to create sound by moving it
-            across the violin strings. Smooth and controlled
-            movements will help you produce a clear sound.(Add another picture of how to hold the bow from different angles)
-          </p>
-        </div>
-
-        <div className="lesson-section">
-          <h2>Bow Basics</h2>
-
-          <div className="bow-parts">
-            <div className="bow-card">
-              <strong>🤚</strong>
-              <span>Relax your hand</span>
-            </div>
-
-            <div className="bow-card">
-              <strong>🏹</strong>
-              <span>Hold the bow gently</span>
-            </div>
-
-            <div className="bow-card">
-              <strong>↔️</strong>
-              <span>Move smoothly</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="lesson-section">
-          <h2>Remember</h2>
-
-          <p>
-            Keep your grip relaxed and let the bow move
-            smoothly across the strings. Avoid squeezing
-            the bow too tightly.
-          </p>
-        </div>
-
-      </section>
-
-      <div className="lesson-next">
-        <button onClick={onNext}>
-          Next →
-        </button>
-      </div>
-    </>
-  );
-}
-
-function PracticeSection({ onNext }) {
-  return (
-    <>
-      <section className="practice-card">
-
-        <p className="eyebrow">PRACTICE</p>
-
-        <h2>Practice Your Bow Hold</h2>
-
-        <p>
-          Hold the bow comfortably and practice moving
-          your hand and arm slowly. Focus on keeping your
-          movement relaxed and controlled.
-        </p>
-
-        <div className="practice-note">
-          🏹
-        </div>
-
-        <div className="practice-tip">
-          💡 Keep your wrist relaxed and avoid gripping
-          the bow too tightly.
-        </div>
-
-      </section>
-
-      <div className="lesson-next">
-        <button onClick={onNext}>
-          Next →
-        </button>
-      </div>
-    </>
-  );
-}
-
-function PlaySection({ onComplete }) {
-  return (
-    <>
-      <section className="play-card">
-
-        <p className="eyebrow">PLAY</p>
-
-        <h2>Play an Open String</h2>
-
-        <p>
-          Choose an open string and make a slow,
-          controlled bow stroke.(Make them hold a note)
-        </p>
-
-        <div className="play-note">
-          G
-        </div>
-
-        <div className="play-status">
-          🎤 Listening for your bow stroke...
-        </div>
-
-      </section>
-
-      <div className="lesson-completion">
-
-        <p>
-          Ready to complete the lesson?
-        </p>
-
-        <button
-          className="complete-button"
-          onClick={onComplete}
-        >
-          Complete Lesson →
-        </button>
-
-      </div>
-    </>
   );
 }
 
