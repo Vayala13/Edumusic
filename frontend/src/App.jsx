@@ -18,7 +18,10 @@ import OpenStrings from "./lessons/violin/Lesson3-OpenStrings";
 import BasicBowing from "./lessons/violin/Lesson4-BasicBowing";
 import FirstNotes from "./lessons/violin/Lesson5-FirstNotes";
 import TrumpetGettingStarted from "./lessons/trumpet/Lesson1-GettingStarted";
-
+import TrumpetBreathing from "./lessons/trumpet/Lesson2-Breathing";
+import TrumpetFirstNotes from "./lessons/trumpet/Lesson3-FirstNotes";
+import TrumpetBasicFingering from "./lessons/trumpet/Lesson4-BasicFingering";
+import TrumpetFirstSong from "./lessons/trumpet/Lesson5-FirstSong";
 
 function App() {
   return (
@@ -42,6 +45,11 @@ function App() {
             <Route path="/lesson/violin/basic-bowing" element={<BasicBowing />} />
             <Route path="/lesson/violin/first-notes" element={<FirstNotes />} />
             <Route path="/lesson/trumpet/getting-started" element={<TrumpetGettingStarted />} />
+            <Route path="/lesson/trumpet/getting-started" element={<TrumpetGettingStarted />} />
+            <Route path="/lesson/trumpet/breathing" element={<TrumpetBreathing />} />
+            <Route path="/lesson/trumpet/first-notes" element={<TrumpetFirstNotes />} />
+            <Route path="/lesson/trumpet/basic-fingering" element={<TrumpetBasicFingering />} />
+            <Route path="/lesson/trumpet/first-song" element={<TrumpetFirstSong />} />
           
           </Route>
         </Routes>
