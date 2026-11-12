@@ -132,7 +132,6 @@
 .app .instrument-display,
 .app .continue-card,
 .app .action-button,
-.app .difficulty-tab,
 .app .course-progress,
 .app .lesson-card,
 .app .current-instrument,
@@ -176,7 +175,6 @@
 .app .instrument-display::before,
 .app .continue-card::before,
 .app .action-button::before,
-.app .difficulty-tab::before,
 .app .course-progress::before,
 .app .lesson-card::before,
 .app .current-instrument::before,
@@ -212,7 +210,6 @@
 .app .action-button:hover,
 .app .next-note-button:hover,
 .app .preset:hover,
-.app .difficulty-tab:hover,
 .app .lesson-card:not(.locked):hover,
 .app .instrument-card:hover,
 .app .continue-card:hover {
@@ -228,7 +225,6 @@
 .app .action-button:active,
 .app .next-note-button:active,
 .app .preset:active,
-.app .difficulty-tab:active,
 .app .lesson-card:not(.locked):active,
 .app .instrument-card:active {
   transform: scale(0.98);
@@ -292,10 +288,6 @@
  
 /* Selected / current states, restyled as tinted glass so they still stand
    out. Colors match the page stylesheets (blue #315eaa, amber var(--accent)). */
-.app .difficulty-tab.active {
-  background: linear-gradient(145deg, rgba(70, 120, 210, 0.92), rgba(49, 94, 170, 0.85));
-  color: #ffffff;
-}
  
 .app .lesson-card.current {
   background: linear-gradient(145deg, rgba(120, 165, 240, 0.55), rgba(49, 94, 170, 0.28));
