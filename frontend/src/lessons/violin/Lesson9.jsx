@@ -193,8 +193,7 @@ function PlaySection({onComplete, instrument}) {
     correct:`Correct! ${current.name} played.`,
     incorrect:`Detected ${detected||"another note"}. Try again.`,
     error:"Detector connection failed. Check that the note server is running."
-  }
-  [status];
+  }[status];
 
   return <section className="play-card">
     <p className="eyebrow">
