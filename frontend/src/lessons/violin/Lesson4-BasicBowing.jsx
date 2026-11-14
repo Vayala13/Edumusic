@@ -44,7 +44,7 @@ function BasicBowing() {
         <Link to="/lessons" className="back-link">← Back to Lessons</Link>
 
         <section className="lesson-header">
-          <p className="eyebrow">LESSON 4 OF 5 • VIOLIN</p>
+          <p className="eyebrow">LESSON 4 OF 10 • VIOLIN</p>
           <h1>Basic Bowing</h1>
           <p>Learn a relaxed bow hold, practice the steps, then try a slow open-string bow stroke.</p>
         </section>

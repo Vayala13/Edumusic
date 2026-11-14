@@ -35,6 +35,42 @@ export const lessons = {
       description: "Play your first notes on the violin.",
       link: "/lesson/violin/first-notes",
     },
+    {
+      number: 6,
+      icon: "🎶",
+      title: "Finger Placement & First position",
+      description: "Learn accurate finger placement and play notes in first position.",
+      link: "/lesson/violin/Lesson6",
+    },
+    {
+      number: 7,
+      icon: "🏹",
+      title: "Bow Control & String Crossing",
+      description: "Make smooth bow changes and move between strings with control.",
+      link: "/lesson/violin/Lesson7",
+    },
+    {
+      number: 8,
+      icon: "📖",
+      title: "Reading Music",
+      description: "Learn how to read music",
+      link: "/lesson/violin/Lesson8",
+    },
+    {
+      number: 9,
+      icon: "🎶",
+      title: "Rhythm & Dynamics",
+      description: "Learn length of notes and Dynamics symbols",
+      link: "/lesson/violin/Lesson9",
+    },
+    {
+      number: 10,
+      icon: "🎶",
+      title: "Shifting & Third Position",
+      description: "What is Shifting",
+      link: "/lesson/violin/Lesson10",
+    },
+  
   ],
 
   trumpet: [

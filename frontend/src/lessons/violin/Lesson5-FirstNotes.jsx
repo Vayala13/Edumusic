@@ -34,7 +34,7 @@ function FirstNotes() {
         <Link to="/lessons" className="back-link">← Back to Lessons</Link>
 
         <section className="lesson-header">
-          <p className="eyebrow">LESSON 5 OF 5 • VIOLIN</p>
+          <p className="eyebrow">LESSON 5 OF 10 • VIOLIN</p>
           <h1>Your First Notes</h1>
           <p>Use your first finger to change the pitch and play a tiny melody.</p>
         </section>

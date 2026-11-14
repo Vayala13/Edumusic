@@ -50,7 +50,7 @@ function GettingStarted() {
         </Link>
 
         <section className="lesson-header">
-          <p className="eyebrow">LESSON 1 OF 5 • VIOLIN</p>
+          <p className="eyebrow">LESSON 1 OF 10 • VIOLIN</p>
           <h1>Getting Started</h1>
           <p>Meet your violin and learn the basics.</p>
         </section>

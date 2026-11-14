@@ -1,0 +1,186 @@
+import { useEffect, useRef, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import Navbar from "../../components/Navbar";
+import { useInstrument } from "../../context/useInstrument";
+import { useProgress } from "../../context/useProgress";
+import { NOTES_WS_URL, isMatch, playedNote } from "../../utils/notes";
+import "./Lesson6.css";
+
+const SEQUENCE = ["D4", "E4", "F4", "G4", "F4", "E4", "D4"].map(note => ({
+  name: note.slice(0, -1), octave: Number(note.slice(-1)),
+  instruction: `Play ${note}.`, stringName: "Violin"
+}));
+
+export default function Lesson6() {
+  const [mode, setMode] = useState("learn");
+  const { instrument } = useInstrument();
+  const { completeLesson } = useProgress();
+  const navigate = useNavigate();
+  const handleComplete = () => { completeLesson(instrument, 6); navigate("/lessons"); };
+  return <div className="app">
+    <header className="top-bar">
+      <div className="logo">
+        Finger Placement & First Position</div>
+        <div className="profile">
+          <span>🎻</span>
+          </div>
+    </header>
+
+    <main className="lesson-page">
+      <Link to="/lessons" className="back-link">← Back to Lessons</Link>
+      <section className="lesson-header">
+        <p className="eyebrow">
+          LESSON 6 OF 10 • VIOLIN
+        </p>
+          <h1>
+            Finger Placement & First Position
+          </h1>
+        <p>
+          Learn accurate finger placement and play notes in first position.
+        </p>
+      </section>
+
+      <div className="lesson-modes">
+        {["learn","practice","play"].map(m => 
+        <button key={m} className={mode===m?"mode-button active":"mode-button"}
+         onClick={()=>setMode(m)}>
+          {m[0].toUpperCase()+m.slice(1)}
+        </button>)
+        }
+      </div>
+      {mode==="learn" ? <>
+        <section className="lesson-content">
+          <div className="instrument-display">
+            <span>🎻</span>
+          </div>
+          <div className="lesson-section">
+            <h2>
+              First Position
+            </h2>
+            <p>
+              Keep your thumb relaxed and fingers curved. In first position, your index finger is finger 1, middle is 2, ring is 3, and pinky is 4.
+            </p>
+          </div>
+          <div className="lesson-section">
+            <h2>
+              Finger Spacing
+            </h2>
+            <p>
+              Notes are separated by "steps" half step means the notes are right next to each other while whole step means there is a larger space between the previous note.
+            </p>
+          </div>
+          <div className="lesson-section">
+            <h2>
+              Notes in this lesson
+            </h2>
+            <p>
+              The following are the four notes that will be played in this lesson.
+            </p>
+            <div className="note-grid">
+              {["D","E","F","G"].map((x,i)=>
+              <div className="note-card" key={x}><strong>{x}</strong>
+              <span>
+                {["No fingers","First finger on D string (whole step)","Second finger on D string (half step)","Third finger on D string (whole step)"][i]}
+                </span>
+              </div>
+              )}
+              </div>
+          </div></section>
+          <div className="lesson-next">
+            <button onClick={()=>setMode("practice")}>Practice →
+              </button></div>
+      </> : mode==="practice" ? <>
+        <section className="practice-card">
+          <p className="eyebrow">PRACTICE</p>
+          <h2>
+            First Position
+          </h2>
+          <p>
+            Keep your thumb relaxed and fingers curved. In first position, finger 1 makes E on the D string, 2 makes F, and 3 makes G. (Keep finger one down while placing finger two and keep that down while placing finger three)
+          </p>
+            <div className="practice-tip">💡
+               Using Tapes or Markings is recommended for beginners.
+            </div>
+        </section>
+        <div className="lesson-next">
+          <button onClick={()=>setMode("play")}>
+            Try the Note Pattern →
+          </button>
+        </div>
+      </> : <PlaySection onComplete={handleComplete} instrument={instrument}/>}
+    </main><Navbar/>
+  </div>;
+}
+
+function PlaySection({onComplete, instrument}) {
+  const [index,setIndex]=useState(0),
+   [status,setStatus]=useState("ready"),
+    [detected,setDetected]=useState(null);
+
+  const socketRef=useRef(null),
+   current=SEQUENCE[index],
+    last=index===SEQUENCE.length-1,
+     target=`${current.name}${current.octave}`;
+
+  const close=()=>{
+    if(socketRef.current){socketRef.current.close();socketRef.current=null;}};
+  const reset=()=>{
+    close();setDetected(null);
+    setStatus("ready");
+    };
+
+  useEffect(()=>()=>close(),[]);
+  
+  const startListening=()=>{
+    close();setStatus("listening");
+
+    const ws=new WebSocket(NOTES_WS_URL);socketRef.current=ws;
+
+    ws.onmessage=e=>{
+      let msg;try{
+        msg=JSON.parse(e.data)
+      }
+      catch{return}
+      
+      if(msg.type!=="note")return;
+      const d=playedNote(msg.note,instrument);
+      setDetected(d);
+      if(isMatch(d,target)){
+        setStatus("correct");
+        close()}else setStatus("incorrect")
+      };
+    ws.onerror=()=>setStatus("error");
+  };
+  const feedback={ready:"Play the note shown.",listening:"Listening...",correct:`Correct! ${current.name} played.`,incorrect:`Detected ${detected||"another note"}. Try again.`,error:"Detector connection failed. Check that the note server is running."}[status];
+  return <section className="play-card"><p className="eyebrow">PLAY</p><h2>Practice the Pattern</h2><p>Play each note and advance after it is recognized.</p>
+    <div className="play-sequence">{SEQUENCE.map((x,j)=>
+      <span key={j} style={{opacity:index===j?1:.5}}>{x.name}
+      </span>)}
+    </div>
+    <div className="practice-note">
+      {current.name}
+    </div>
+    <p>
+      {current.instruction}
+    </p>
+    <p 
+      className="play-status">{feedback}
+    </p>
+    <p>
+      Note {index+1} of {SEQUENCE.length}
+    </p>
+    <div className="lesson-next">{status!=="correct"&&
+      <button onClick={startListening}>{
+        status==="listening"?"Listening...":"Start Listening"
+        }
+      </button>}
+      <button disabled={status!=="correct"} onClick={()=>{reset();
+        index===SEQUENCE.length-1?onComplete():setIndex(index+1)}}>
+          {last?"Finish Lesson →":"Next Note →"}
+      </button>
+      <button className="mode-button" onClick={()=>{reset();setIndex(0)}}>Restart</button></div>
+    <div className="lesson-completion">
+      <p> Complete every note correctly to finish this lesson.</p>
+    </div>
+  </section>;
+}
