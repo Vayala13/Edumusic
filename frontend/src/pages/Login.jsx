@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../context/useAuth";
+import { logError } from "../utils/logError";
 import "./Auth.css";
 
 function Login() {
@@ -18,7 +19,8 @@ function Login() {
     try {
       await login(email, password);
       navigate("/");
-    } catch {
+    } catch (error) {
+      logError("Error executing login", error);
       setError("Incorrect email or password.");
     }
   }

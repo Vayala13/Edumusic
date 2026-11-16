@@ -7,6 +7,7 @@ import { lessons } from "../data/lessons";
 import { useEffect, useState } from "react";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "../firebase";
+import { handleDatabaseError, logError } from "../utils/logError";
 import "./Profile.css";
 import { usePracticeStats } from "../context/usePracticeStats";
 import { useTheme } from "../context/useTheme";
@@ -84,8 +85,8 @@ function Profile() {
         setUsername(initialUsername);
         setUsernameInput(initialUsername);
       } catch (error) {
-        console.error("Error loading username:", error);
-        setUsernameError("Could not load your username.");
+        const response = handleDatabaseError("Error loading username", error);
+        setUsernameError(response.message);
       } finally {
         setUsernameLoading(false);
       }
@@ -118,14 +119,19 @@ function Profile() {
       setUsername(trimmedUsername);
       setEditingUsername(false);
     } catch (error) {
-      console.error("Error saving username:", error);
-      setUsernameError("Could not save your username. Please try again.");
+      const response = handleDatabaseError("Error saving username", error);
+      setUsernameError(response.message);
     }
   }
 
   async function handleLogout() {
-    await logout();
-    navigate("/login");
+    try {
+      await logout();
+      navigate("/login");
+    } catch (error) {
+      logError("Error logging out", error);
+      navigate("/login");
+    }
   }
 
   const currentLessons = lessons[instrument] || [];

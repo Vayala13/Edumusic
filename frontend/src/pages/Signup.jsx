@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../context/useAuth";
+import { logError } from "../utils/logError";
 import "./Auth.css";
 
 function Signup() {
@@ -22,8 +23,9 @@ function Signup() {
     try {
       await signup(email, password);
       navigate("/"); // send them to the home page once account is created
-    } catch (err) {
-      if (err.code === "auth/email-already-in-use") {
+    } catch (error) {
+      logError("Error executing signup", error);
+      if (error.code === "auth/email-already-in-use") {
         setError("An account with this email already exists.");
       } else {
         setError("Something went wrong. Please try again.");

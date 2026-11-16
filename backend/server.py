@@ -38,8 +38,10 @@ import asyncio
 import os
 import queue
 import threading
+import traceback
 
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+from fastapi.responses import JSONResponse
 
 from instruments.trumpet.detector import (
     FRAME_LENGTH,
@@ -47,6 +49,19 @@ from instruments.trumpet.detector import (
     SAMPLE_RATE,
     NoteDetector,
 )
+
+# Same idea as Express:
+#   if (err) {
+#     console.error("Error executing query", err.stack);
+#     return res.status(500).json({ message: "Internal server error" });
+#   }
+INTERNAL_SERVER_ERROR = {"message": "Internal server error"}
+
+
+def internal_server_error():
+    """HTTP 500 with a message — no counts or internal details."""
+    traceback.print_exc()
+    return JSONResponse(status_code=500, content=INTERNAL_SERVER_ERROR)
 
 
 class NoteHub:
@@ -175,7 +190,11 @@ def create_app(session_factory=MicSession):
 
     @app.get("/health")
     async def health():
-        return {"status": "ok", "listeners": hub.client_count}
+        try:
+            return {"status": "ok", "listeners": hub.client_count}
+        except Exception:
+            # Database / server issue: 500 + message, not a listener count.
+            return internal_server_error()
 
     @app.websocket("/ws/notes")
     async def notes(websocket: WebSocket):
@@ -193,6 +212,13 @@ def create_app(session_factory=MicSession):
                 await websocket.receive_text()
         except WebSocketDisconnect:
             pass
+        except Exception:
+            traceback.print_exc()
+            try:
+                # WebSocket equivalent of HTTP 500.
+                await websocket.close(code=1011, reason="Internal server error")
+            except RuntimeError:
+                pass
         finally:
             remaining = hub.remove(websocket)
             if remaining == 0 and state["session"] is not None:

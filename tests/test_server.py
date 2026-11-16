@@ -55,6 +55,18 @@ class TestHealth:
         assert response.status_code == 200
         assert response.json() == {"status": "ok", "listeners": 0}
 
+    def test_failure_returns_500_without_details(self, client, monkeypatch):
+        # Arrange
+        def broken(self):
+            raise RuntimeError("listener count unavailable")
+
+        monkeypatch.setattr(NoteHub, "client_count", property(broken))
+        # Act
+        response = client.get("/health")
+        # Assert
+        assert response.status_code == 500
+        assert response.json() == {"message": "Internal server error"}
+
 
 class TestNoteStream:
     def test_a_detected_note_reaches_the_client(self, client):

@@ -4,20 +4,23 @@ import { useInstrument } from "../context/useInstrument";
 import { useProgress } from "../context/useProgress";
 import { lessons } from "../data/lessons";
 import { usePracticeStats } from "../context/usePracticeStats";
+import { countDueNotes, unlockedNotes } from "../data/reviewDeck";
 import "./Home.css";
 
 function Home() {
   const { instrument } = useInstrument();
-  const { isLessonCompleted } = useProgress();
+  const { progress, isLessonCompleted, progressError } = useProgress();
 
   const {
     stats,
     loadingStats,
+    statsError,
     dayStreak,
   } = usePracticeStats();
 
   const xp = stats?.xp ?? 0;
   const level = Math.floor(xp / 100) + 1;
+  const databaseError = statsError || progressError;
 
   const instrumentDetails = {
     violin: { name: "Violin", icon: "🎻" },
@@ -31,6 +34,10 @@ function Home() {
   const instrumentIcon = currentInstrument.icon;
 
   const currentLessons = lessons[instrument] || [];
+  const dueCount = countDueNotes(
+    unlockedNotes(instrument, progress?.[instrument] || []),
+    stats?.srs?.[instrument] || {}
+  );
 
   // Finds the first lesson that has not been completed
   const currentLesson =
@@ -46,8 +53,14 @@ function Home() {
         <div className="logo">Edumusic</div>
 
         <div className="profile">
-          <span>🔥 {loadingStats ? "…" : dayStreak} day streak </span>
-          <span>⭐ {loadingStats ? "…" : `Level ${level} · ${xp} XP`}</span>
+          {databaseError ? (
+            <span role="alert">{databaseError}</span>
+          ) : (
+            <>
+              <span>🔥 {loadingStats ? "…" : dayStreak} day streak </span>
+              <span>⭐ {loadingStats ? "…" : `Level ${level} · ${xp} XP`}</span>
+            </>
+          )}
           <Link to="/profile" className="profile-link" aria-label="Go to your profile">
             👤
           </Link>
@@ -102,6 +115,28 @@ function Home() {
             </div>
           )}
         </section>
+
+        {!loadingStats && dueCount > 0 && (
+          <section className="continue-card">
+            <div>
+              <p className="eyebrow">REVIEW</p>
+              <h2>
+                Review · {dueCount} {dueCount === 1 ? "note" : "notes"} due
+              </h2>
+              <p>
+                Play the notes that are due today.
+              </p>
+            </div>
+
+            <Link
+              to="/practice?mode=review"
+              className="continue-button"
+              aria-label="Start daily review"
+            >
+              →
+            </Link>
+          </section>
+        )}
 
         <section className="quick-actions">
 

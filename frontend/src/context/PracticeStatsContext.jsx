@@ -9,6 +9,11 @@ import { db } from "../firebase";
 import { useAuth } from "./useAuth";
 import { getLocalDateKey } from "./practiceStatsUtils";
 import { PracticeStatsContext } from "./practiceStatsContext";
+import { gradeAgain, gradeGood, newCard } from "../utils/srs";
+import { handleDatabaseError } from "../utils/logError";
+
+const REVIEW_XP_GOOD = 5;
+const REVIEW_XP_AGAIN = 2;
 
 const EMPTY_STATS = {
     xp: 0,
@@ -17,12 +22,28 @@ const EMPTY_STATS = {
         trumpet: [],
     },
     practiceDates: [],
+    srs: {
+        violin: {},
+        trumpet: {},
+    },
 };
+
+function normalizeSrs(savedSrs) {
+    return {
+        violin: savedSrs?.violin && typeof savedSrs.violin === "object"
+            ? savedSrs.violin
+            : {},
+        trumpet: savedSrs?.trumpet && typeof savedSrs.trumpet === "object"
+            ? savedSrs.trumpet
+            : {},
+    };
+}
 
 function PracticeStatsProvider({ children }) {
     const { user } = useAuth();
     const [stats, setStats] = useState(EMPTY_STATS);
     const [loadingStats, setLoadingStats] = useState(true);
+    const [statsError, setStatsError] = useState("");
     const statsRef = useRef(EMPTY_STATS);
 
     useEffect(() => {
@@ -32,11 +53,13 @@ function PracticeStatsProvider({ children }) {
             if (!user) {
                 statsRef.current = EMPTY_STATS;
                 setStats(EMPTY_STATS);
+                setStatsError("");
                 setLoadingStats(false);
                 return;
             }
 
             setLoadingStats(true);
+            setStatsError("");
 
             try {
                 const statsDocRef = doc(db, "practiceStats", user.uid);
@@ -60,6 +83,7 @@ function PracticeStatsProvider({ children }) {
                     practiceDates: Array.isArray(savedData.practiceDates)
                         ? savedData.practiceDates
                         : [],
+                    srs: normalizeSrs(savedData.srs),
                 };
 
                 if (active) {
@@ -67,11 +91,16 @@ function PracticeStatsProvider({ children }) {
                     setStats(loadedStats);
                 }
             } catch (error) {
-                console.error("Could not load practice stats:", error);
+                const response = handleDatabaseError(
+                    "Error loading practice stats",
+                    error
+                );
 
                 if (active) {
+                    // No XP / streak counts on failure — only the message.
                     statsRef.current = EMPTY_STATS;
                     setStats(EMPTY_STATS);
+                    setStatsError(response.message);
                 }
             } finally {
                 if (active) {
@@ -120,8 +149,10 @@ function PracticeStatsProvider({ children }) {
                 : [...currentStats.practiceDates, today],
         };
 
+        const previousStats = currentStats;
         statsRef.current = updatedStats;
         setStats(updatedStats);
+        setStatsError("");
 
         try {
             await setDoc(
@@ -129,9 +160,87 @@ function PracticeStatsProvider({ children }) {
                 updatedStats
             );
         } catch (error) {
-            console.error("Could not save practice stats:", error);
+            const response = handleDatabaseError(
+                "Error saving practice stats",
+                error
+            );
+            statsRef.current = previousStats;
+            setStats(previousStats);
+            setStatsError(response.message);
             throw error;
         }
+    }
+
+    async function recordReviewResult(instrument, note, grade) {
+        if (
+            !user ||
+            !["violin", "trumpet"].includes(instrument) ||
+            !note ||
+            (grade !== "good" && grade !== "again")
+        ) {
+            return 0;
+        }
+
+        const currentStats = statsRef.current;
+        const today = getLocalDateKey();
+        const existingNotes =
+            currentStats.notesLearned[instrument] || [];
+        const isNewNote = !existingNotes.includes(note);
+        const alreadyPracticedToday =
+            currentStats.practiceDates.includes(today);
+        const currentCard =
+            currentStats.srs?.[instrument]?.[note] || newCard();
+        const nextCard =
+            grade === "good"
+                ? gradeGood(currentCard)
+                : gradeAgain(currentCard);
+        const reviewXp =
+            grade === "good" ? REVIEW_XP_GOOD : REVIEW_XP_AGAIN;
+        const xpGain = reviewXp + (isNewNote ? 10 : 0);
+
+        const updatedStats = {
+            ...currentStats,
+            xp: currentStats.xp + xpGain,
+            notesLearned: {
+                ...currentStats.notesLearned,
+                [instrument]: isNewNote
+                    ? [...existingNotes, note]
+                    : existingNotes,
+            },
+            practiceDates: alreadyPracticedToday
+                ? currentStats.practiceDates
+                : [...currentStats.practiceDates, today],
+            srs: {
+                ...currentStats.srs,
+                [instrument]: {
+                    ...(currentStats.srs?.[instrument] || {}),
+                    [note]: nextCard,
+                },
+            },
+        };
+
+        const previousStats = currentStats;
+        statsRef.current = updatedStats;
+        setStats(updatedStats);
+        setStatsError("");
+
+        try {
+            await setDoc(
+                doc(db, "practiceStats", user.uid),
+                updatedStats
+            );
+        } catch (error) {
+            const response = handleDatabaseError(
+                "Error saving review result",
+                error
+            );
+            statsRef.current = previousStats;
+            setStats(previousStats);
+            setStatsError(response.message);
+            throw error;
+        }
+
+        return xpGain;
     }
 
     const allNotesLearned =
@@ -165,7 +274,9 @@ function PracticeStatsProvider({ children }) {
             value={{
                 stats,
                 loadingStats,
+                statsError,
                 recordSuccessfulNote,
+                recordReviewResult,
                 allNotesLearned,
                 dayStreak,
             }}
