@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { AuthContext } from "./useAuth";
 import {
   createUserWithEmailAndPassword,
+  sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
@@ -33,7 +34,11 @@ export function AuthProvider({ children }) {
     return signOut(auth);
   }
 
-  const value = { user, signup, login, logout };
+  function resetPassword(email) {
+    return sendPasswordResetEmail(auth, email);
+  }
+
+  const value = { user, signup, login, logout, resetPassword };
 
   return (
     <AuthContext.Provider value={value}>

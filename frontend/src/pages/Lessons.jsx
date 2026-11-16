@@ -86,20 +86,7 @@ function Lessons() {
           </p>
         </section>
 
-        <div className="difficulty-tabs">
-          <button className="difficulty-tab active">
-            Beginner
-          </button>
-
-          <button className="difficulty-tab">
-            Intermediate
-          </button>
-
-          <button className="difficulty-tab">
-            Advanced
-          </button>
-        </div>
-
+        
         <section className="course-progress">
 
           <div className="progress-header">
@@ -142,9 +129,9 @@ function Lessons() {
           ) : (
             <div className="lesson-card">
               <div className="lesson-info">
-                <h2>Lessons coming soon!</h2>
+                <h2>Lessons</h2>
                 <p>
-                  Beginner lessons for {instrumentName} will be added soon.
+                  
                 </p>
               </div>
             </div>
