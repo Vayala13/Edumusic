@@ -17,6 +17,11 @@ import Tuning from "./lessons/violin/Lesson2-Tuning";
 import OpenStrings from "./lessons/violin/Lesson3-OpenStrings";
 import BasicBowing from "./lessons/violin/Lesson4-BasicBowing";
 import FirstNotes from "./lessons/violin/Lesson5-FirstNotes";
+import Lesson6 from "./lessons/violin/Lesson6";
+import Lesson7 from "./lessons/violin/Lesson7";
+import Lesson8 from "./lessons/violin/Lesson8";
+import Lesson9 from "./lessons/violin/Lesson9";
+import Lesson10 from "./lessons/violin/Lesson10";
 import TrumpetGettingStarted from "./lessons/trumpet/Lesson1-GettingStarted";
 import TrumpetBreathing from "./lessons/trumpet/Lesson2-Breathing";
 import TrumpetFirstNotes from "./lessons/trumpet/Lesson3-FirstNotes";
@@ -44,6 +49,11 @@ function App() {
             <Route path="/lesson/violin/open-strings" element={<OpenStrings />} />
             <Route path="/lesson/violin/basic-bowing" element={<BasicBowing />} />
             <Route path="/lesson/violin/first-notes" element={<FirstNotes />} />
+            <Route path="/lesson/violin/Lesson6" element={<Lesson6 />} />
+            <Route path="/lesson/violin/Lesson7" element={<Lesson7 />} />
+            <Route path="/lesson/violin/Lesson8" element={<Lesson8 />} />
+            <Route path="/lesson/violin/Lesson9" element={<Lesson9 />} />
+            <Route path="/lesson/violin/Lesson10" element={<Lesson10 />} />
             <Route path="/lesson/trumpet/getting-started" element={<TrumpetGettingStarted />} />
             <Route path="/lesson/trumpet/getting-started" element={<TrumpetGettingStarted />} />
             <Route path="/lesson/trumpet/breathing" element={<TrumpetBreathing />} />

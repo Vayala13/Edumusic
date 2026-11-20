@@ -44,7 +44,7 @@ function Tuning() {
 
         <section className="lesson-header">
           <p className="eyebrow">
-            LESSON 2 OF 5 • VIOLIN
+            LESSON 2 OF 10 • VIOLIN
           </p>
 
           <h1>Tuning Your Violin</h1>
