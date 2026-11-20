@@ -203,7 +203,7 @@ function OpenStrings() {
       <main className="lesson-page">
         <Link to="/lessons" className="back-link">← Back to Lessons</Link>
         <section className="lesson-header">
-          <p className="eyebrow">LESSON 3 OF 5 • VIOLIN</p>
+          <p className="eyebrow">LESSON 3 OF 10 • VIOLIN</p>
           <h1>Open Strings</h1>
           <p>Learn the four open strings, hear each note, then play them yourself.</p>
         </section>

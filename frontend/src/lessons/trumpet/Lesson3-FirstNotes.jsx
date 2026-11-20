@@ -91,7 +91,23 @@ function LearnSection({ onNext }) {
           <h2>Your First Notes</h2>
 
           <p>
-            //.
+            Now that you've learned how to breathe properly and
+            create a steady sound, it's time to learn your first
+            trumpet notes!
+
+            The trumpet produces different notes by changing
+            the combination of valves you press and adjusting
+            the speed of your air and the vibration of your lips.
+
+            In this lesson, you'll be introduced to five
+            beginner trumpet notes: C, D, E, F, and G.
+            These notes will help you develop your playing
+            technique and prepare you for simple melodies.
+
+            Remember that the trumpet is a B-flat instrument,
+            so the notes you read in trumpet music sound
+            differently from concert-pitch instruments.
+            For now, we'll focus on written trumpet notes.
           </p>
 
           <div className="string-grid">
@@ -121,7 +137,20 @@ function LearnSection({ onNext }) {
           <h2>Remember</h2>
 
           <p>
-            // .
+            When playing trumpet notes, focus on maintaining
+            steady airflow and a comfortable embouchure.
+
+            Each note requires the correct valve combination
+            along with proper lip control. Some notes may
+            use the same valve combination but produce
+            different pitches depending on how your lips
+            vibrate.
+
+            Start slowly and focus on producing a clear,
+            consistent sound before moving to higher notes.
+            Take breaks whenever your lips feel tired,
+            and remember that developing good technique
+            takes practice.
           </p>
         </div>
       </section>
@@ -142,7 +171,27 @@ function PracticeSection({ onNext }) {
         <h2>Play C</h2>
 
         <p>
-          //.
+          Let's practice playing your first note: C!
+
+          Start by sitting or standing upright with relaxed
+          shoulders. Hold your trumpet comfortably and
+          position the mouthpiece gently against your lips.
+
+          To play a written C on a B-flat trumpet, leave
+          all three valves open without pressing any
+          of them.
+
+          Take a comfortable breath and blow steady air
+          through the mouthpiece while allowing your
+          lips to vibrate.
+
+          Try to produce a clear, steady C for 3 to 5
+          seconds. If you hear a different pitch,
+          gently adjust your airflow and embouchure
+          rather than pressing harder against your lips.
+
+          Repeat the exercise a few times, taking
+          short breaks between attempts.
         </p>
 
         <div className="practice-note">C</div>
@@ -168,8 +217,33 @@ function PlaySection({ onComplete }) {
         <h2>Play Your First Notes</h2>
 
         <p>
-          // .
+          Now it's time to put your new skills into practice!
+
+          In this exercise, you'll practice playing five
+          trumpet notes in order: C, D, E, F, and G.
+
+          Start by holding your trumpet comfortably and
+          taking a steady breath. Play each note slowly,
+          focusing on producing a clear and consistent sound.
+
+          Use the following valve combinations for
+          written notes on a B-flat trumpet:
+
+          C: No valves pressed.
+          D: First and third valves pressed.
+          E: First and second valves pressed.
+          F: First valve pressed.
+          G: No valves pressed.
+
+          Remember that C and G use the same valve
+          combination but require different lip vibrations
+          to produce different pitches.
+
+          Practice transitioning between each note
+          without rushing. Take a breath whenever needed
+          and repeat the sequence until you feel comfortable.
         </p>
+
 
         <div className="play-sequence">
           <span>C</span>
