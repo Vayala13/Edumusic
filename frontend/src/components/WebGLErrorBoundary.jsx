@@ -6,6 +6,7 @@ export class WebGLErrorBoundary extends React.Component {
         return { hasError: true };
     }
     componentDidCatch(error, errorInfo) {
+        console.error("Error rendering WebGL", error?.stack || error, errorInfo);
         this.props.onError?.(error, errorInfo);
     }
     render() {

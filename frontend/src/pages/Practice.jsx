@@ -1,9 +1,18 @@
 import { useEffect, useRef, useState } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import { useInstrument } from "../context/useInstrument";
+import { useProgress } from "../context/useProgress";
+import {
+  REVIEW_UNLOCK_HINTS,
+  buildReviewQueue,
+  buildWeakQueue,
+  unlockedNotes,
+} from "../data/reviewDeck";
 import "./Practice.css";
 import { NOTES_WS_URL, isMatch, playedNote } from "../utils/notes";
 import { usePracticeStats } from "../context/usePracticeStats";
+import { handleDatabaseError, logError } from "../utils/logError";
 
 // Every violin note a beginner is likely to reach, lowest to highest.
 const VIOLIN_NOTES = [
@@ -149,7 +158,10 @@ function StaffNote({ note, status = "neutral", playedNote = null }) {
 
 function Practice() {
   const { instrument } = useInstrument();
-  const { recordSuccessfulNote } = usePracticeStats();
+  const { progress } = useProgress();
+  const { stats, loadingStats, recordSuccessfulNote, recordReviewResult } = usePracticeStats();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const initialReview = searchParams.get("mode") === "review";
 
   const [isListening, setIsListening] = useState(false);
   const [currentNote, setCurrentNote] = useState(0);
@@ -158,9 +170,18 @@ function Practice() {
 
   // "choose" = pick a note from the dropdown and step through in order.
   // "random" = one shuffled round through every note, then finish.
-  const [mode, setMode] = useState("choose");
+  // "review" = due notes from completed lessons, requeue misses.
+  const [mode, setMode] = useState(initialReview ? "review" : "choose");
+  const [seededKey, setSeededKey] = useState("");
   const [randomOrder, setRandomOrder] = useState([]);
   const [finished, setFinished] = useState(false);
+  const [reviewQueue, setReviewQueue] = useState([]);
+  const [reviewMissed, setReviewMissed] = useState({});
+  const [reviewSkips, setReviewSkips] = useState({});
+  const [reviewCleared, setReviewCleared] = useState(0);
+  const [reviewXpGained, setReviewXpGained] = useState(0);
+  const [reviewFinished, setReviewFinished] = useState(false);
+  const [reviewEmpty, setReviewEmpty] = useState(null);
 
   // The open connection to the pitch detector.
   const socketRef = useRef(null);
@@ -178,24 +199,52 @@ function Practice() {
   const instrumentName = currentInstrument.name;
   const instrumentIcon = currentInstrument.icon;
   const notes = currentInstrument.notes;
+  const completedLessons = progress?.[instrument] || [];
+  const unlocked = unlockedNotes(instrument, completedLessons);
+  const unlockHint = REVIEW_UNLOCK_HINTS[instrument];
+  const srsMap = stats?.srs?.[instrument] || {};
+  const reviewSeedKey = `${mode}:${instrument}:${completedLessons.join(",")}:${loadingStats}`;
+
+  if (mode === "review" && !loadingStats && seededKey !== reviewSeedKey) {
+    const queue = buildReviewQueue(unlocked, srsMap);
+    setSeededKey(reviewSeedKey);
+    setReviewQueue(queue);
+    setReviewMissed({});
+    setReviewSkips({});
+    setReviewCleared(0);
+    setReviewXpGained(0);
+    setReviewFinished(false);
+    setReviewEmpty(
+      queue.length === 0
+        ? unlocked.length === 0
+          ? "locked"
+          : "caught-up"
+        : null
+    );
+  }
 
   const isPracticeAvailable =
     instrument === "violin" || instrument === "trumpet";
 
   // The list of notes the page is stepping through right now.
   const sequence = mode === "random" ? randomOrder : notes;
-  const targetNote = sequence[currentNote];
+  const targetNote =
+    mode === "review" ? reviewQueue[0] : sequence[currentNote];
   const isLastNote = currentNote === sequence.length - 1;
   const nextLabel = !isLastNote
-    ? "Next Note"
+    ? "Next note"
     : mode === "random"
       ? "Finish"
-      : "Practice Again";
+      : "Start over";
+  const reviewRemaining = reviewQueue.length;
+  const reviewTotal = reviewCleared + reviewRemaining;
+  const reviewBarPercent =
+    reviewTotal === 0 ? 0 : Math.round((reviewCleared / reviewTotal) * 100);
 
   const feedbackText = {
-    listening: "Listening for your note...",
-    correct: "Great job! You played the correct note.",
-    incorrect: "Not quite. Try again!",
+    listening: "Listening…",
+    correct: "That matches the staff.",
+    incorrect: "That wasn't it. Play it again.",
     error: "Lost the connection to the pitch detector. Start the server, then try again.",
   }[practiceStatus];
 
@@ -227,6 +276,78 @@ function Practice() {
     setPracticeStatus("ready");
   };
 
+  const resetReviewTracking = () => {
+    setReviewMissed({});
+    setReviewSkips({});
+    setReviewCleared(0);
+    setReviewXpGained(0);
+    setReviewFinished(false);
+  };
+
+  const startReviewSession = (queue) => {
+    setReviewQueue(queue);
+    resetReviewTracking();
+    setReviewEmpty(null);
+    resetAttempt();
+  };
+
+  const beginDueReview = () => {
+    const queue = buildReviewQueue(unlocked, srsMap);
+    if (queue.length === 0) {
+      setReviewQueue([]);
+      resetReviewTracking();
+      setReviewEmpty(unlocked.length === 0 ? "locked" : "caught-up");
+      resetAttempt();
+      return;
+    }
+
+    startReviewSession(queue);
+  };
+
+  const beginWeakReview = () => {
+    const queue = buildWeakQueue(unlocked, srsMap);
+    if (queue.length === 0) {
+      setReviewEmpty("locked");
+      return;
+    }
+    startReviewSession(queue);
+  };
+
+  const finishReviewIfEmpty = (nextQueue) => {
+    if (nextQueue.length === 0) {
+      setReviewFinished(true);
+    }
+  };
+
+  const completeReviewCard = async (note, missed) => {
+    if (reviewQueue[0] !== note) {
+      return;
+    }
+
+    const grade = missed ? "again" : "good";
+    let xpGain = 0;
+
+    try {
+      xpGain = (await recordReviewResult(instrument, note, grade)) || 0;
+    } catch (error) {
+      handleDatabaseError("Error recording review result", error);
+    }
+
+    const nextQueue = reviewQueue.slice(1);
+    setReviewQueue(nextQueue);
+    setReviewCleared((count) => count + 1);
+    setReviewXpGained((xp) => xp + xpGain);
+    finishReviewIfEmpty(nextQueue);
+    resetAttempt();
+  };
+
+  const requeueReviewCard = (note) => {
+    const rest = reviewQueue.slice(1);
+    const nextQueue = [...rest, note];
+    setReviewQueue(nextQueue);
+    resetAttempt();
+  };
+
   const startListening = () => {
     closeSocket();
     setIsListening(true);
@@ -241,7 +362,8 @@ function Practice() {
 
       try {
         message = JSON.parse(event.data);
-      } catch {
+      } catch (error) {
+        logError("Error parsing note message", error);
         return;
       }
 
@@ -256,13 +378,24 @@ function Practice() {
       if (isMatch(played, targetNote)) {
         setPracticeStatus("correct");
 
+        if (mode === "review") {
+          closeSocket();
+          return;
+        }
+
         recordSuccessfulNote(instrument, targetNote).catch((error) => {
-          console.error("Could not record successful note:", error);
+          handleDatabaseError("Error recording successful note", error);
         });
 
         closeSocket(); // right note: stop listening
       } else {
         setPracticeStatus("incorrect");
+        if (mode === "review" && targetNote) {
+          setReviewMissed((current) => ({
+            ...current,
+            [targetNote]: true,
+          }));
+        }
       }
     };
 
@@ -298,6 +431,16 @@ function Practice() {
     setFinished(false);
     resetAttempt();
 
+    if (newMode === "review") {
+      setSearchParams({ mode: "review" }, { replace: true });
+    } else {
+      setSearchParams({}, { replace: true });
+      setSeededKey("");
+      setReviewQueue([]);
+      resetReviewTracking();
+      setReviewEmpty(null);
+    }
+
     if (newMode === "random") {
       setRandomOrder(shuffle(notes));
     }
@@ -315,6 +458,36 @@ function Practice() {
     }
   };
 
+  const continueReviewAfterCorrect = () => {
+    const note = reviewQueue[0];
+    if (!note) {
+      return;
+    }
+
+    completeReviewCard(note, Boolean(reviewMissed[note]));
+  };
+
+  const skipReviewCard = () => {
+    const note = reviewQueue[0];
+    if (!note) {
+      return;
+    }
+
+    const skips = (reviewSkips[note] || 0) + 1;
+    setReviewSkips((current) => ({ ...current, [note]: skips }));
+    setReviewMissed((current) => ({ ...current, [note]: true }));
+    if (skips >= 2) {
+      completeReviewCard(note, true);
+      return;
+    }
+
+    requeueReviewCard(note);
+  };
+
+  const retryReviewCard = () => {
+    resetAttempt();
+  };
+
   if (!isPracticeAvailable) {
     return (
       <div className="app">
@@ -322,7 +495,7 @@ function Practice() {
           <section className="practice-intro">
             <p className="eyebrow">PRACTICE MODE</p>
             <h1>Practice</h1>
-            <p>Practice playing notes and improve your accuracy.</p>
+            <p>Play the note on the staff. The detector checks whether it matches.</p>
           </section>
 
           <section className="practice-card">
@@ -333,14 +506,14 @@ function Practice() {
 
               <div>
                 <h2>{instrumentName}</h2>
-                <p>Beginner Practice</p>
+                <p>Beginner practice</p>
               </div>
             </div>
 
             <div className="practice-finished">
-              <h3>Practice coming soon!</h3>
+              <h3>Not on this instrument yet</h3>
               <p>
-                Beginner practice for {instrumentName} will be added soon.
+                {instrumentName} practice is not in the app yet.
               </p>
             </div>
           </section>
@@ -357,7 +530,7 @@ function Practice() {
         <section className="practice-intro">
           <p className="eyebrow">PRACTICE MODE</p>
           <h1>Practice</h1>
-          <p>Practice playing notes and improve your accuracy.</p>
+          <p>Play the note on the staff. The detector checks whether it matches.</p>
         </section>
 
         <section className="practice-card">
@@ -366,7 +539,7 @@ function Practice() {
 
             <div>
               <h2>{instrumentName}</h2>
-              <p>Beginner Practice</p>
+              <p>Beginner practice</p>
             </div>
           </div>
 
@@ -377,7 +550,7 @@ function Practice() {
                 aria-pressed={mode === "choose"}
                 onClick={() => switchMode("choose")}
               >
-                Choose a Note
+                Choose a note
               </button>
 
               <button
@@ -391,7 +564,15 @@ function Practice() {
                   }
                 }}
               >
-                🎲 Random
+                Random
+              </button>
+
+              <button
+                className={mode === "review" ? "mode-button active" : "mode-button"}
+                aria-pressed={mode === "review"}
+                onClick={() => switchMode("review")}
+              >
+                Review
               </button>
             </div>
 
@@ -412,29 +593,104 @@ function Practice() {
             )}
           </div>
 
-          {finished ? (
+          {mode === "review" && loadingStats ? (
             <div className="practice-finished">
-              <h3>Round complete</h3>
-              <p>You went through all {randomOrder.length} notes.</p>
+              <h3>Loading review</h3>
+              <p>Checking which notes are due.</p>
+            </div>
+          ) : mode === "review" && reviewEmpty === "locked" ? (
+            <div className="practice-finished">
+              <h3>Review is locked</h3>
+              <p>
+                Finish {unlockHint?.title || "the first playing lesson"} to
+                unlock daily review.
+              </p>
+              {unlockHint && (
+                <div className="practice-buttons">
+                  <Link to={unlockHint.link} className="start-practice-button">
+                    Go to {unlockHint.title}
+                  </Link>
+                </div>
+              )}
+            </div>
+          ) : mode === "review" && reviewEmpty === "caught-up" ? (
+            <div className="practice-finished">
+              <h3>Nothing due today</h3>
+              <p>
+                Come back tomorrow, or drill the notes that still feel shaky.
+              </p>
+              <div className="practice-buttons">
+                <button
+                  className="start-practice-button"
+                  onClick={beginWeakReview}
+                >
+                  Drill weak notes
+                </button>
+              </div>
+            </div>
+          ) : mode === "review" && reviewFinished ? (
+            <div className="practice-finished">
+              <h3>Review done</h3>
+              <p>
+                You reviewed {reviewCleared}{" "}
+                {reviewCleared === 1 ? "note" : "notes"} and gained{" "}
+                {reviewXpGained} XP.
+              </p>
+              <div className="practice-buttons">
+                <button
+                  className="start-practice-button"
+                  onClick={beginDueReview}
+                >
+                  Check for more
+                </button>
+                <button
+                  className="next-note-button"
+                  onClick={() => switchMode("choose")}
+                >
+                  Choose a note
+                </button>
+              </div>
+            </div>
+          ) : finished ? (
+            <div className="practice-finished">
+              <h3>Shuffle finished</h3>
+              <p>You played all {randomOrder.length} notes.</p>
 
               <div className="practice-buttons">
                 <button
                   className="start-practice-button"
                   onClick={startRandomRound}
                 >
-                  Shuffle Again
+                  Shuffle again
                 </button>
 
                 <button
                   className="next-note-button"
                   onClick={() => switchMode("choose")}
                 >
-                  Choose a Note
+                  Choose a note
                 </button>
               </div>
             </div>
           ) : (
             <>
+              {mode === "review" && (
+                <div className="review-progress">
+                  <p className="practice-progress">
+                    {reviewCleared} done · {reviewRemaining} left
+                  </p>
+                  <div
+                    className="review-progress-bar"
+                    role="progressbar"
+                    aria-valuemin={0}
+                    aria-valuemax={100}
+                    aria-valuenow={reviewBarPercent}
+                  >
+                    <span style={{ width: `${reviewBarPercent}%` }} />
+                  </div>
+                </div>
+              )}
+
               <div className="target-note">
                 <p className="target-note-label">PLAY THIS NOTE</p>
                 <StaffNote note={targetNote} instrument={instrument} status={practiceStatus} playedNote={practiceStatus === "incorrect" ? detectedNote : null} />
@@ -446,17 +702,17 @@ function Practice() {
               <div className="practice-listening">
                 <div className="microphone-icon">🎤</div>
 
-                <h3>Ready to Practice?</h3>
+                <h3>Ready?</h3>
 
                 <p>
-                  Allow microphone access and play the note when you're ready.
+                  Start the note server, then play the note on the staff.
                 </p>
 
                 <button
                   className="start-practice-button"
                   onClick={startListening}
                 >
-                  {isListening ? "Listening..." : "Start Listening"}
+                  {isListening ? "Listening…" : "Start listening"}
                 </button>
               </div>
 
@@ -472,25 +728,41 @@ function Practice() {
 
               {isListening && (
                 <div className="practice-actions">
-                  <p className="practice-progress">
-                    Note {currentNote + 1} of {sequence.length}
-                  </p>
+                  {mode !== "review" && (
+                    <p className="practice-progress">
+                      Note {currentNote + 1} of {sequence.length}
+                    </p>
+                  )}
 
                   <div className="practice-buttons">
                     {practiceStatus === "correct" ? (
-                      <button className="next-note-button" onClick={goToNext}>
-                        {nextLabel}
+                      <button
+                        className="next-note-button"
+                        onClick={
+                          mode === "review"
+                            ? continueReviewAfterCorrect
+                            : goToNext
+                        }
+                      >
+                        {mode === "review" ? "Next note" : nextLabel}
                       </button>
                     ) : (
                       <>
                         <button
                           className="next-note-button"
-                          onClick={resetAttempt}
+                          onClick={
+                            mode === "review" ? retryReviewCard : resetAttempt
+                          }
                         >
-                          Try Again
+                          Try again
                         </button>
 
-                        <button className="next-note-button" onClick={goToNext}>
+                        <button
+                          className="next-note-button"
+                          onClick={
+                            mode === "review" ? skipReviewCard : goToNext
+                          }
+                        >
                           Skip
                         </button>
                       </>

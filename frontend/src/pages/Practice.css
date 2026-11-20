@@ -129,6 +129,13 @@
     opacity: 0.9;
 }
 
+a.start-practice-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+}
+
 .practice-result {
     margin-top: 25px;
     padding: 20px;
@@ -167,6 +174,31 @@
     margin: 0 0 12px;
     color: #000000;
     font-size: 12px;
+}
+
+.review-progress {
+    margin-top: 22px;
+    padding-top: 22px;
+    border-top: 1px solid rgba(0, 0, 0, 0.064);
+}
+
+.review-progress .practice-progress {
+    margin-bottom: 8px;
+    text-align: center;
+}
+
+.review-progress-bar {
+    height: 8px;
+    overflow: hidden;
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.08);
+}
+
+.review-progress-bar span {
+    display: block;
+    height: 100%;
+    border-radius: 999px;
+    background: var(--accent);
 }
 
 .next-note-button {

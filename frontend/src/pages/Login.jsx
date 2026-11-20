@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../context/useAuth";
+import { logError } from "../utils/logError";
 import "./Auth.css";
 
 function Login() {
@@ -21,12 +22,9 @@ function Login() {
     try {
       await login(email, password);
       navigate("/");
-    } catch (err) {
-      console.error("Firebase login error:", err.code, err.message, err);
-      setError(
-        [err.code, err.message].filter(Boolean).join(" — ") ||
-          "Incorrect email or password."
-      );
+    } catch (error) {
+      logError("Error executing login", error);
+      setError("Incorrect email or password.");
     }
   }
 
@@ -43,12 +41,9 @@ function Login() {
     try {
       await resetPassword(email);
       setInfo(`Reset link sent to ${email}. Check inbox and spam.`);
-    } catch (err) {
-      console.error("Firebase reset error:", err.code, err.message, err);
-      setError(
-        [err.code, err.message].filter(Boolean).join(" — ") ||
-          "Could not send reset email."
-      );
+    } catch (error) {
+      logError("Error sending password reset", error);
+      setError("Could not send reset email.");
     } finally {
       setResetting(false);
     }

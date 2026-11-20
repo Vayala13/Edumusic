@@ -5,6 +5,7 @@ import { useInstrument } from "../context/useInstrument";
 import { playableNotes, songs } from "../data/songs";
 import { NOTES_WS_URL, isMatch, playedNote } from "../utils/notes";
 import { playSong } from "../utils/songAudio";
+import { logError } from "../utils/logError";
 import "./SongPlay.css";
 
 const COUNT_IN_BEATS = 4;
@@ -174,7 +175,8 @@ function SongPlay() {
       let message;
       try {
         message = JSON.parse(event.data);
-      } catch {
+      } catch (error) {
+        logError("Error parsing note message", error);
         return;
       }
       if (message.type === "note") {
