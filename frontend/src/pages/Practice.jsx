@@ -23,6 +23,8 @@ const VIOLIN_NOTES = [
 
 const TRUMPET_NOTES = ["C", "D", "E", "F", "G"];
 
+const UKULELE_NOTES = ["G4", "C4", "E4", "A4"];
+
 // Returns a shuffled copy of the list. Each note appears exactly once, so a
 // random round never repeats a note.
 function shuffle(list) {
@@ -190,7 +192,7 @@ function Practice() {
     violin: { name: "Violin", icon: "🎻", notes: VIOLIN_NOTES },
     trumpet: { name: "Trumpet", icon: "🎺", notes: TRUMPET_NOTES },
     guitar: { name: "Guitar", icon: "🎸", notes: [] },
-    ukulele: { name: "Ukulele", icon: "🪕", notes: [] },
+    ukulele: { name: "Ukulele", icon: "🪕", notes: UKULELE_NOTES },
   };
 
   const currentInstrument =
@@ -224,7 +226,7 @@ function Practice() {
   }
 
   const isPracticeAvailable =
-    instrument === "violin" || instrument === "trumpet";
+    instrument === "violin" || instrument === "trumpet" || instrument === "ukulele";
 
   // The list of notes the page is stepping through right now.
   const sequence = mode === "random" ? randomOrder : notes;
