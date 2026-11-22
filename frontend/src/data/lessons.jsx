@@ -70,7 +70,7 @@ export const lessons = {
       description: "What is Shifting",
       link: "/lesson/violin/Lesson10",
     },
-  
+
   ],
 
   trumpet: [
@@ -108,6 +108,44 @@ export const lessons = {
       title: "Playing Your First Song",
       description: "Put your new skills together.",
       link: "/lesson/trumpet/first-song",
+    },
+  ],
+
+  ukulele: [
+    {
+      number: 1,
+      icon: "🪕",
+      title: "Getting Started",
+      description: "Meet your ukulele and learn the basics.",
+      link: "/lesson/ukulele/getting-started",
+    },
+    {
+      number: 2,
+      icon: "🎵",
+      title: "Tuning Your Ukulele",
+      description: "Learn how to tune your ukulele using G-C-E-A.",
+      link: "/lesson/ukulele/tuning",
+    },
+    {
+      number: 3,
+      icon: "🎼",
+      title: "Open Strings",
+      description: "Learn and play the four ukulele strings: G, C, E, and A.",
+      link: "/lesson/ukulele/open-strings",
+    },
+    {
+      number: 4,
+      icon: "🎶",
+      title: "Basic Chords and Strumming",
+      description: "Learn beginner ukulele chords and basic strumming patterns.",
+      link: "/lesson/ukulele/basic-chords",
+    },
+    {
+      number: 5,
+      icon: "🎶",
+      title: "Playing Your First Song",
+      description: "Play your first ukulele melody using open strings.",
+      link: "/lesson/ukulele/first-song",
     },
   ],
 };

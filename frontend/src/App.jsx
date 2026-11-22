@@ -27,42 +27,52 @@ import TrumpetBreathing from "./lessons/trumpet/Lesson2-Breathing";
 import TrumpetFirstNotes from "./lessons/trumpet/Lesson3-FirstNotes";
 import TrumpetBasicFingering from "./lessons/trumpet/Lesson4-BasicFingering";
 import TrumpetFirstSong from "./lessons/trumpet/Lesson5-FirstSong";
+import UkuleleLesson1 from "./lessons/ukulele/Lesson1-GettingStarted";
+import UkuleleLesson2 from "./lessons/ukulele/Lesson2-Tuning";
+import UkuleleLesson3 from "./lessons/ukulele/Lesson3-OpenStrings";
+import UkuleleLesson4 from "./lessons/ukulele/Lesson4-BasicChords";
+import UkuleleLesson5 from "./lessons/ukulele/Lesson5-FirstSong";
 
 function App() {
   return (
     <BrowserRouter>
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route element={<ProtectedRoute />}>
-            <Route path="/" element={<Home />} />
-            <Route path="/lessons" element={<Lessons />} />
-            <Route path="/practice" element={<Practice />} />
-            <Route path="/songs" element={<Songs />} />
-            <Route path="/songs/:songId" element={<SongPlay />} />
-            <Route path="/challenges" element={<Challenges />} />
-            <Route path="/closet" element={<Closet />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/metronome" element={<Metronome />} />
-            <Route path="/lesson/violin/getting-started" element={<GettingStarted />} />
-            <Route path="/lesson/violin/tuning" element={<Tuning />} />
-            <Route path="/lesson/violin/open-strings" element={<OpenStrings />} />
-            <Route path="/lesson/violin/basic-bowing" element={<BasicBowing />} />
-            <Route path="/lesson/violin/first-notes" element={<FirstNotes />} />
-            <Route path="/lesson/violin/Lesson6" element={<Lesson6 />} />
-            <Route path="/lesson/violin/Lesson7" element={<Lesson7 />} />
-            <Route path="/lesson/violin/Lesson8" element={<Lesson8 />} />
-            <Route path="/lesson/violin/Lesson9" element={<Lesson9 />} />
-            <Route path="/lesson/violin/Lesson10" element={<Lesson10 />} />
-            <Route path="/lesson/trumpet/getting-started" element={<TrumpetGettingStarted />} />
-            <Route path="/lesson/trumpet/getting-started" element={<TrumpetGettingStarted />} />
-            <Route path="/lesson/trumpet/breathing" element={<TrumpetBreathing />} />
-            <Route path="/lesson/trumpet/first-notes" element={<TrumpetFirstNotes />} />
-            <Route path="/lesson/trumpet/basic-fingering" element={<TrumpetBasicFingering />} />
-            <Route path="/lesson/trumpet/first-song" element={<TrumpetFirstSong />} />
-          
-          </Route>
-        </Routes>
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route element={<ProtectedRoute />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/lessons" element={<Lessons />} />
+          <Route path="/practice" element={<Practice />} />
+          <Route path="/songs" element={<Songs />} />
+          <Route path="/songs/:songId" element={<SongPlay />} />
+          <Route path="/challenges" element={<Challenges />} />
+          <Route path="/closet" element={<Closet />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/metronome" element={<Metronome />} />
+          <Route path="/lesson/violin/getting-started" element={<GettingStarted />} />
+          <Route path="/lesson/violin/tuning" element={<Tuning />} />
+          <Route path="/lesson/violin/open-strings" element={<OpenStrings />} />
+          <Route path="/lesson/violin/basic-bowing" element={<BasicBowing />} />
+          <Route path="/lesson/violin/first-notes" element={<FirstNotes />} />
+          <Route path="/lesson/violin/Lesson6" element={<Lesson6 />} />
+          <Route path="/lesson/violin/Lesson7" element={<Lesson7 />} />
+          <Route path="/lesson/violin/Lesson8" element={<Lesson8 />} />
+          <Route path="/lesson/violin/Lesson9" element={<Lesson9 />} />
+          <Route path="/lesson/violin/Lesson10" element={<Lesson10 />} />
+          <Route path="/lesson/trumpet/getting-started" element={<TrumpetGettingStarted />} />
+          <Route path="/lesson/trumpet/getting-started" element={<TrumpetGettingStarted />} />
+          <Route path="/lesson/trumpet/breathing" element={<TrumpetBreathing />} />
+          <Route path="/lesson/trumpet/first-notes" element={<TrumpetFirstNotes />} />
+          <Route path="/lesson/trumpet/basic-fingering" element={<TrumpetBasicFingering />} />
+          <Route path="/lesson/trumpet/first-song" element={<TrumpetFirstSong />} />
+          <Route path="/lesson/ukulele/getting-started" element={<UkuleleLesson1 />} />
+          <Route path="/lesson/ukulele/tuning" element={<UkuleleLesson2 />} />
+          <Route path="/lesson/ukulele/open-strings" element={<UkuleleLesson3 />} />
+          <Route path="/lesson/ukulele/basic-chords" element={<UkuleleLesson4 />} />
+          <Route path="/lesson/ukulele/first-song" element={<UkuleleLesson5 />} />
+
+        </Route>
+      </Routes>
     </BrowserRouter>
   );
 }
